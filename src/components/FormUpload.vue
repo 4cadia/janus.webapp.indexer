@@ -33,7 +33,7 @@
           <input type="text" class="returnUpload">
         </div>
         <div class="btn-form">
-          <button type="button" class="btn-cancel">Cancel</button>
+          <button type="button" class="btn-cancel" @click="reset()">Cancel</button>
           <button type="button" class="btn-index">Index content</button>
         </div>
       </form>
@@ -43,7 +43,9 @@
 
 <!-- Javascript -->
 <script>
-// import { upload } from './file-upload.service';
+
+/* eslint-disable */
+import indexer from 'janusndxr';
 
 const STATUS_INITIAL = 0,
   STATUS_SAVING = 1,
@@ -51,13 +53,13 @@ const STATUS_INITIAL = 0,
   STATUS_FAILED = 3;
 
 export default {
-  name: "app",
+  name: 'app',
   data() {
     return {
       uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
-      uploadFieldName: "photos"
+      uploadFieldName: 'photos'
     };
   },
   computed: {
