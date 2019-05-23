@@ -1,5 +1,6 @@
 <template>
   <div class="account">
+    <label>{{activeAccount}}</label>
     <button type="submit" class="btn btn-primary" v-on:click="handleClick">
       <svg
         class="icon-account"
@@ -19,9 +20,23 @@
 </template>
 
 <script>
+/* eslint-disable */
+import { serverBus } from '../main'
+
 export default {
+
   name: 'MenuAccount',
   components: {},
+  data() {
+    return {
+      activeAccount : "Active account does not exists"
+    }
+  },
+  created() {
+    serverBus.$on('activeAccount', (activeAccount) => {
+      this.activeAccount = activeAccount
+      });
+  },
   methods: {
     handleClick: function (value) {
       alert('Account Feature Soon!')
@@ -33,6 +48,9 @@ export default {
 <style scoped>
 .account {
   text-align: right;
+  -webkit-align-items: center;
+  display: flex;
+  align-items: center;
 }
 .btn {
   border: 0;

@@ -7,10 +7,10 @@
     <div class="container">
       <!--UPLOAD-->
       <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving" class="form">
-        <div class="txt-wallet">
+        <!-- <div class="txt-wallet">
           <label for="text">Wallet Address</label>
           <input type="text" class="metaMask">
-        </div>
+        </div> -->
         <div class="dropbox">
           <input
             type="file"
@@ -34,7 +34,7 @@
         </div>
         <div class="btn-form">
           <button type="button" class="btn-cancel" @click="reset()">Cancel</button>
-          <button type="button" class="btn-index">Index content</button>
+          <button type="button" class="btn-index" @click="save()">Index content</button>
         </div>
       </form>
     </div>
@@ -45,7 +45,11 @@
 <script>
 
 /* eslint-disable */
-import indexer from 'janusndxr';
+import Indexer from 'janusndxr';
+import IndexRequest from "janusndxr/dist/src/Domain/Entity/IndexRequest";
+import SpiderConfig from "janusndxr/dist/src/Domain/Entity/SpiderConfig";
+import jsonConfig from "../utils/web3Config.json";
+import { serverBus } from '../main';
 
 const STATUS_INITIAL = 0,
   STATUS_SAVING = 1,
@@ -59,7 +63,10 @@ export default {
       uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
-      uploadFieldName: 'photos'
+      uploadFieldName: 'photos',
+      account: null,
+      contentType: null,
+      web3Provider: null,
     };
   },
   computed: {
@@ -87,8 +94,10 @@ export default {
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
 
-      upload(formData)
+
+      this.upload(formData)
         .then(x => {
+          console(x);
           this.uploadedFiles = [].concat(x);
           this.currentStatus = STATUS_SUCCESS;
         })
@@ -97,6 +106,31 @@ export default {
           this.currentStatus = STATUS_FAILED;
         });
     },
+    upload(formData){
+
+
+      let config = new SpiderConfig();
+      config.RpcHost = jsonConfig.EthereumRpcHost;
+      config.RpcPort = jsonConfig.EthereumRpcPort;
+      config.ipfsHost = jsonConfig.IpfsRpcHost;
+      config.ipfsPort = jsonConfig.IpfsRpcPort;
+      config.indexerSmAbi = jsonConfig.indexerSmAbi;
+      config.indexerSmAddress = jsonConfig.indexerSmAddress;
+      config.Web3Provider = this.provider;
+
+
+      console.log(`web3provider---> ${config.Web3Provider}`)
+      
+      
+      let indexer = new Indexer(this.account, config);
+
+      let indexRequest = new IndexRequest();
+
+     // console.log(jsonConfig.);
+
+
+    },
+
     filesChange(fieldName, fileList) {
       // handle file changes
       const formData = new FormData();
@@ -111,6 +145,12 @@ export default {
       // save it
       this.save(formData);
     }
+  },
+  created() {
+    serverBus.$on('activeAccount', (activeAccount) => {
+      this.account = activeAccount
+    });
+    console.log(this.account)
   },
   mounted() {
     this.reset();

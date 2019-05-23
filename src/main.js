@@ -5,7 +5,9 @@ import store from './store'
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
+export const serverBus = new Vue()
+
+/* eslint-disable */
 new Vue({
   el: '#app',
   store,
