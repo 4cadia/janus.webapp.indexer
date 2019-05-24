@@ -20,23 +20,21 @@
 </template>
 
 <script>
-/* eslint-disable */
-import { serverBus } from '../main'
+import { mapState } from 'vuex'
 
 export default {
 
   name: 'MenuAccount',
   components: {},
+  // eslint-disable-next-line
   data() {
     return {
-      activeAccount : "Active account does not exists"
+      // activeAccount: 'Active account does not exists'
     }
   },
-  created() {
-    serverBus.$on('activeAccount', (activeAccount) => {
-      this.activeAccount = activeAccount
-      });
-  },
+  computed: mapState({
+    activeAccount: state => state.web3.account
+  }),
   methods: {
     handleClick: function (value) {
       alert('Account Feature Soon!')

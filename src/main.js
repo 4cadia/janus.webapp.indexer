@@ -1,13 +1,13 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import store from './store'
 
 Vue.config.productionTip = false
+Vue.use(Vuex)
 
-export const serverBus = new Vue()
-
-/* eslint-disable */
+// eslint-disable-next-line
 new Vue({
   el: '#app',
   store,

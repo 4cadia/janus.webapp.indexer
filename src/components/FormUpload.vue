@@ -49,7 +49,7 @@ import Indexer from 'janusndxr';
 import IndexRequest from "janusndxr/dist/src/Domain/Entity/IndexRequest";
 import SpiderConfig from "janusndxr/dist/src/Domain/Entity/SpiderConfig";
 import jsonConfig from "../utils/web3Config.json";
-import { serverBus } from '../main';
+import { mapState } from 'vuex'
 
 const STATUS_INITIAL = 0,
   STATUS_SAVING = 1,
@@ -64,9 +64,8 @@ export default {
       uploadError: null,
       currentStatus: null,
       uploadFieldName: 'photos',
-      account: null,
       contentType: null,
-      web3Provider: null,
+      
     };
   },
   computed: {
@@ -81,7 +80,11 @@ export default {
     },
     isFailed() {
       return this.currentStatus === STATUS_FAILED;
-    }
+    },
+    ...mapState({
+      account: state => state.web3.account,
+      provider: state => state.web3.instance
+    })
   },
   methods: {
     reset() {
@@ -118,17 +121,9 @@ export default {
       config.indexerSmAddress = jsonConfig.indexerSmAddress;
       config.Web3Provider = this.provider;
 
-
-      console.log(`web3provider---> ${config.Web3Provider}`)
-      
-      
-      let indexer = new Indexer(this.account, config);
-
+      //let indexer = new Indexer(this.account, config);
       let indexRequest = new IndexRequest();
-
      // console.log(jsonConfig.);
-
-
     },
 
     filesChange(fieldName, fileList) {
@@ -145,12 +140,6 @@ export default {
       // save it
       this.save(formData);
     }
-  },
-  created() {
-    serverBus.$on('activeAccount', (activeAccount) => {
-      this.account = activeAccount
-    });
-    console.log(this.account)
   },
   mounted() {
     this.reset();

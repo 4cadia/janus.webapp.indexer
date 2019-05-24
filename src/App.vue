@@ -12,8 +12,6 @@
 
 /* eslint-disable */ 
 import Header from '@/components/Header'
-import {default as web3js} from "./utils/getWeb3"
-import { serverBus } from './main';
 
 export default {
   name: 'App',
@@ -24,14 +22,11 @@ export default {
   data() {
     return {
       activeAccount: null,
+      provider: ''
     };
   },
-  mounted(){ 
-    web3js.then( web3 => {
-      this.activeAccount = web3.accounts[0];
-      serverBus.$emit('activeAccount', this.activeAccount);
-      serverBus.$emit('provider', web3);
-    });
+  created(){ 
+    this.$store.dispatch('web3/registerWeb3')
   },
 }
 </script>
