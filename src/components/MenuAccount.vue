@@ -7,16 +7,26 @@
         <path d="M0 0h24v24H0z" fill="none"></path>
       </svg>
     </button>
+    <v-modal ref="modal" :header="this.mensagem"> <p name="body">TESTE</p> </v-modal>
   </div>
 </template>
 
 <script>
+import Modal from '@/components/Modal'
+
 export default {
   name: 'MenuAccount',
-  components: {},
+  components: {
+    'v-modal': Modal
+  },
+  data () {
+    return {
+      mensagem: 'Isso é um modal'
+    }
+  },
   methods: {
     handleClick: function (value) {
-      alert('Account Feature Soon!')
+      this.$refs.modal.openModal()
     }
   }
 }
