@@ -19,11 +19,6 @@ export default {
   components: {
     'v-modal': Modal
   },
-  data () {
-    return {
-      mensagem: 'Isso é um modal'
-    }
-  },
   methods: {
     handleClick: function (value) {
       this.$refs.modal.openModal()

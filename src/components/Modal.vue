@@ -6,19 +6,29 @@
                     <div class="modal-container">
                         <div class="modal-header">
                             <slot name="header">
-                                {{ header }}
+                                <h3> Sign In </h3>
                             </slot>
                         </div>
                         <div class="modal-body">
                             <slot name="body">
-                            default body
+                                <p>
+                                    To sign in Janus it is necessary create an identity in Civic.
+                                </p>
+                                <p>
+                                    Civic is a decentralized identity provider to store your data saifly. With this the user have total control about his information.
+                                </p>
                             </slot>
                         </div>
                         <div class="modal-footer">
                             <slot name="footer">
-                                default footer
                                 <button class="modal-default-button" @click="closeModal">
-                                    OK
+                                    <svg width="248px" height="45px" viewBox="0 0 256 48" version="1.1">
+                                        <rect id="button-bg" fill="#3AB03E" x="0" y="0" width="256" height="48" rx="24"></rect>
+                                             <text id="Connect-with-Civic" font-family="'Montserrat', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">
+                                                <tspan x="64.351" y="30">Connect with Civic</tspan>
+                                             </text>
+                                        <path d="M15,24 C15,28.7557705 18.8112793,33 24,33 C28.3410645,33 31.8986122,30.5324628 32.9909576,27 L36,27 C34.8386328,32.1411987 30.861084,36 24,36 C16.3657227,36 12,30.8982832 12,24.0000449 C12,17.1018066 16.3879395,12 24,12 C31.0664062,12 34.8386328,15.8588013 36,21 L32.9909576,21 C31.8986122,17.4674474 28.6115723,15 24,15 C18.4970703,15 15,19.2441397 15,24 Z M24,20 C25.6569,20 27,21.2859605 27,22.872371 C27,24.006383 25.9967,24.9866275 25,25.4535793 L25,29 L23,29 L23,25.4535793 C22.0032,24.9866275 21,24.006383 21,22.872371 C21,21.2859605 22.3432,20 24,20 Z" id="ICON" fill="#FFFFFE"></path>
+                                    </svg>
                                 </button>
                             </slot>
                         </div>
@@ -45,11 +55,6 @@ export default {
     return {
       showModal: false
     }
-  },
-  props: {
-    header: {
-      type: String
-    }
   }
 }
 
@@ -74,27 +79,37 @@ export default {
 }
 
 .modal-container {
-  width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
+  width: 32vw;
+  height: 30vh;
+  margin: 0 auto;
+  padding: 2% ;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
 }
 
 .modal-header h3 {
   margin-top: 0;
-  color: #42b983;
+  color: #3AB03E;
+  display: flex;
+  justify-content: center;
 }
 
-.modal-body {
+.modal-body p {
   margin: 20px 0;
+  display: flex;
+  text-align: left;
 }
 
 .modal-default-button {
-  float: right;
+
+  border: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+  padding: 0 5px 0 5px;
+  cursor: pointer;
 }
 
 </style>
