@@ -7,6 +7,7 @@
                         <div class="modal-header">
                             <slot name="header">
                                 <h3> Sign In </h3>
+                                <button class="modal-default-button" @click="closeModal">X</button>
                             </slot>
                         </div>
                         <div class="modal-body">
@@ -21,7 +22,7 @@
                         </div>
                         <div class="modal-footer">
                             <slot name="footer">
-                                <button class="modal-default-button" @click="closeModal">
+                                <button class="modal-default-button" @click="handleCivic">
                                     <svg width="248px" height="45px" viewBox="0 0 256 48" version="1.1">
                                         <rect id="button-bg" fill="#3AB03E" x="0" y="0" width="256" height="48" rx="24"></rect>
                                              <text id="Connect-with-Civic" font-family="'Montserrat', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">
@@ -49,6 +50,20 @@ export default {
     },
     openModal: function () {
       this.showModal = true
+    },
+    handleCivic: function () {
+      let civicSip = new civic.sip({ appId: '-uXno0-XF' })
+      console.log(civicSip)
+      civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP })
+      // Listen for data
+      civicSip.on('auth-code-received', function (event) {
+        console.log(event)
+        // encoded JWT Token is sent to the server
+        var jwtToken = event.response
+        console.log(jwtToken)
+        // Your function to pass JWT token to your server
+        sendAuthCode(jwtToken)
+      })
     }
   },
   data () {
@@ -57,7 +72,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>
@@ -103,7 +117,6 @@ export default {
 }
 
 .modal-default-button {
-
   border: 0;
   background: none;
   box-shadow: none;
@@ -111,5 +124,4 @@ export default {
   padding: 0 5px 0 5px;
   cursor: pointer;
 }
-
 </style>

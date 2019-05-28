@@ -13,7 +13,6 @@
 
 <script>
 import Modal from '@/components/Modal'
-
 export default {
   name: 'MenuAccount',
   components: {
@@ -31,6 +30,7 @@ export default {
 .account {
   text-align: right;
 }
+
 .btn {
   border: 0;
   width: 40px;
@@ -41,11 +41,14 @@ export default {
   color: var(--color-gray);
   padding: 0;
 }
+
 .btn:hover svg {
   color: var(--color-navy);
 }
+
 .icon-account {
   width: 100%;
   height: 100%;
 }
+
 </style>
