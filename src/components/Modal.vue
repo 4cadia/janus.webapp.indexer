@@ -7,16 +7,13 @@
                         <div class="modal-header">
                             <slot name="header">
                                 <h3> Sign In </h3>
-                                <button class="modal-default-button" @click="closeModal">X</button>
+                                <button class="modal-close-button" @click="closeModal">X</button>
                             </slot>
                         </div>
                         <div class="modal-body">
                             <slot name="body">
                                 <p>
-                                    To sign in Janus it is necessary create an identity in Civic.
-                                </p>
-                                <p>
-                                    Civic is a decentralized identity provider to store your data saifly. With this the user have total control about his information.
+                                    To sign in Janus it is necessary create a decentralized identity.
                                 </p>
                             </slot>
                         </div>
@@ -54,7 +51,7 @@ export default {
       this.showModal = true
     },
     handleCivic: function () {
-      let civicSip = new civic.Sip({appId: '-uXno0-XF'})
+      let civicSip = new civic.sip({appId: '-uXno0-XF'})
 
       let exemplo = 'BASIC_SIGNUP'
 
@@ -101,8 +98,8 @@ export default {
 }
 
 .modal-container {
-  width: 32vw;
-  height: 30vh;
+  width: 25vw;
+  height: 40vh;
   margin: 0 auto;
   padding: 2% ;
   background-color: #fff;
@@ -111,11 +108,14 @@ export default {
   transition: all .3s ease;
 }
 
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .modal-header h3 {
   margin-top: 0;
   color: #3AB03E;
-  display: flex;
-  justify-content: center;
 }
 
 .modal-body p {
@@ -132,4 +132,23 @@ export default {
   padding: 0 5px 0 5px;
   cursor: pointer;
 }
+
+.modal-close-button {
+  border: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+  padding: 0 8px 0 ;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 12pt;
+}
+
+.modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15%;
+}
+
 </style>
