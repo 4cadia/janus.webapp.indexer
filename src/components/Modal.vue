@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Modal',
   components: {},
@@ -52,21 +54,27 @@ export default {
       this.showModal = true
     },
     handleCivic: function () {
-      let civicSip = new civic.sip({ appId: '-uXno0-XF' })
-      console.log(civicSip)
-      civicSip.signup({ style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP })
+      let civicSip = new civic.Sip({appId: '-uXno0-XF'})
+
+      let exemplo = 'BASIC_SIGNUP'
+
+      let options = civicSip.ScopeRequests[exemplo]
+
+      civicSip.signup({style: 'popup', scopeRequest: options})
       // Listen for data
       civicSip.on('auth-code-received', function (event) {
         console.log(event)
-        // encoded JWT Token is sent to the server
-        var jwtToken = event.response
-        console.log(jwtToken)
-        // Your function to pass JWT token to your server
-        sendAuthCode(jwtToken)
+        const data = {'token': event.response}
+        axios.post(process.env.IDENTITY_BASE_URL, data)
+          .then((response) => {
+            console.log(response)
+          })
       })
     }
   },
+
   data () {
+    console.log(process.env)
     return {
       showModal: false
     }
