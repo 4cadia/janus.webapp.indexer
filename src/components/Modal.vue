@@ -19,16 +19,12 @@
                         </div>
                         <div class="modal-footer">
                             <slot name="footer">
-                                <button class="modal-default-button" @click="handleCivic">
-                                    <svg width="248px" height="45px" viewBox="0 0 256 48" version="1.1">
-                                        <rect id="button-bg" fill="#3AB03E" x="0" y="0" width="256" height="48" rx="24"></rect>
-                                             <text id="Connect-with-Civic" font-family="'Montserrat', Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">
-                                                <tspan x="64.351" y="30">Connect with Civic</tspan>
-                                             </text>
-                                        <path d="M15,24 C15,28.7557705 18.8112793,33 24,33 C28.3410645,33 31.8986122,30.5324628 32.9909576,27 L36,27 C34.8386328,32.1411987 30.861084,36 24,36 C16.3657227,36 12,30.8982832 12,24.0000449 C12,17.1018066 16.3879395,12 24,12 C31.0664062,12 34.8386328,15.8588013 36,21 L32.9909576,21 C31.8986122,17.4674474 28.6115723,15 24,15 C18.4970703,15 15,19.2441397 15,24 Z M24,20 C25.6569,20 27,21.2859605 27,22.872371 C27,24.006383 25.9967,24.9866275 25,25.4535793 L25,29 L23,29 L23,25.4535793 C22.0032,24.9866275 21,24.006383 21,22.872371 C21,21.2859605 22.3432,20 24,20 Z" id="ICON" fill="#FFFFFE"></path>
-                                    </svg>
+                                <button class="modal-button civic logo-civic" @click="handleCivic" v-bind:class="{'button-disabled': disableCivic}">
+                                    Connect with Civic
                                 </button>
-                                <button class="modal-button-metamask" @click="handleMetaMask">Connect with MetaMask</button>
+                                <button class="modal-button metamask logo-metamask" @click="handleMetaMask" v-bind:class="{'button-disabled': disableMetamask}">
+                                  Connect with MetaMask
+                                </button>
                                 <div class="modal-error-message" v-if="showError">
                                     <p>Não foi possivel efetuar o acesso, tente novamente mais tarde.</p>
                                 </div>
@@ -77,7 +73,9 @@ export default {
   data () {
     return {
       showModal: false,
-      showError: false
+      showError: false,
+      disableCivic: process.env.DISABLE_IDENTITY_CIVIC,
+      disableMetamask: process.env.DISABLE_IDENTITY_METAMASK
     }
   }
 }
@@ -142,6 +140,31 @@ export default {
     color: #800000;
 }
 
+.modal-button {
+  width: 240px;
+  height: 44px;
+  font-family:'Montserrat', Helvetica, Arial, sans-serif;
+  font-size: 16;
+  font-weight: 700;
+  color: #FFFFFF;
+  border-radius: 33px;
+  border: 0;
+  border: none;
+  padding: 0 5px 0 5px;
+  cursor: pointer;
+  margin-top: 5%;
+}
+
+.modal-button.civic {
+  background: url("../assets/civic-logo.png")  no-repeat 15px center, #3AB03E;
+  background-size: 23px;
+}
+
+.modal-button.metamask {
+  background: url("../assets/metamask-logo.png")  no-repeat 15px center, #F79220;
+  background-size: 23px;
+}
+
 .modal-button-metamask {
   width: 240px;
   height: 44px;
@@ -174,6 +197,10 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 15%;
+}
+
+.button-disabled {
+  background: silver !important;
 }
 
 </style>
