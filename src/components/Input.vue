@@ -7,7 +7,7 @@
       :type="inputType"
       :name="inputName"
       :placeholder="placeholderTxt"
-      :inputValue="value"
+      :value="value"
       @input="$emit('input', $event.target.value)"
       v-on:keyup="handleKeyUp"
     >
@@ -83,7 +83,7 @@ export default {
     inputLabel: {
       type: String
     },
-    inputValue: {
+    value: {
       type: String,
       required: true
     }
@@ -133,6 +133,7 @@ export default {
 }
 .field.invalid {
   border-color: var(--color-red);
+  color: var(--color-red);
 }
 .content--file .field {
   opacity: 0; /* invisible but it's there! */

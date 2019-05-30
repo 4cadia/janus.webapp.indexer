@@ -8,6 +8,8 @@
 </template>
 
 <script>
+
+/* eslint-disable */ 
 import Header from '@/components/Header'
 
 export default {
@@ -15,6 +17,9 @@ export default {
 
   components: {
     'v-header': Header
+  },
+  created(){ 
+    this.$store.dispatch('web3/registerWeb3')
   }
 }
 </script>

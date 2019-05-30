@@ -8,9 +8,10 @@
         type="file"
         :class="this.isValid"
         :name="inputName"
-        :inputValue="value"
-        @input="$emit('input', $event.target.value)"
-        v-on:keyup="handleKeyUp"
+        :value="filename"
+        @input="$emit('input', $event.target.files)"
+        v-on:change="handleUpload($event.target.files)"
+        :accept="this.accept"
       >
       <p class="separator">or</p>
       <button type="button" class="btn btn--icon">Browse Files</button>
@@ -41,7 +42,8 @@ export default {
       isValid: this.hasExceptions ? 'invalid' : '',
       uploadedFiles: [],
       uploadError: null,
-      currentStatus: null
+      currentStatus: null,
+      filename: ''
     }
   },
   computed: {
@@ -65,7 +67,7 @@ export default {
     },
     uploadMessage () {
       let message = 'Drag your file(s) here'
-      if (this.isSaving) message = 'Uploading ' + this.uploadedFiles.length + 'files...'
+      if (this.isSaving) message = 'Uploading ' + this.filename
       return message
     }
   },
@@ -76,13 +78,10 @@ export default {
       this.uploadedFiles = []
       this.uploadError = null
     },
-    handleKeyUp: function (event) {
-      this.fieldIsValid(this.isEmpty(this.value), 'EmptyField')
-      this.fieldIsValid(!this.isAlphaNumeric(this.value), 'InvalidField')
-    },
-    handleValidate: function (event) {
-      this.handleKeyUp()
-      return this.hasExceptions
+    handleUpload: function (files) {
+      this.filename = files[0].name
+      this.fieldIsValid(this.isEmpty(this.filename), 'EmptyField')
+      this.save()
     },
     fieldIsValid: function (exception, type) {
       let exceptionType = this.filterExceptionByType(type)
@@ -95,36 +94,25 @@ export default {
     filterExceptionByType: function (exceptionType) {
       return this.exceptions.filter(exception => exception.type === exceptionType)
     },
-    isAlphaNumeric: function (value) {
-      var re = /^[a-zA-Z0-9]+$/
-      return value ? re.test(value) : true
-    },
     isEmpty: function (value) {
       return value === '' || value == null
     },
     save (formData) {
-      // upload data to the server
       this.currentStatus = STATUS_SAVING
     }
   },
   props: {
-    placeholderTxt: {
-      type: String
-    },
-    inputType: {
-      type: String,
-      required: true
-    },
     inputName: {
       type: String,
       required: true
     },
-    inputLabel: {
-      type: String
-    },
-    inputValue: {
+    value: {
       type: String,
       required: true
+    },
+    accept: {
+      type: String,
+      required: false
     }
   },
   mounted () {

@@ -1,49 +1,48 @@
-<!-- App.vue -->
-
-<!-- HTML Template -->
 <template>
-  <div id="app">
-    <h1>Upload Files</h1>
-    <div class="container">
-      <!--UPLOAD-->
-      <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving" class="form">
-        <div class="txt-wallet">
-          <label for="text">Wallet Address</label>
-          <input type="text" class="metaMask">
+  <div class="content">
+    <form @submit.prevent="handleSubmit" class="form">
+      <div class="form_content">
+        <div class="form_field">
+          <v-file-input
+            inputName="file"
+            v-model="files"
+            ref="inputFile"
+            accept=".zip"
+          />
         </div>
-        <div class="dropbox">
-          <input
-            type="file"
-            multiple
-            :name="uploadFieldName"
-            :disabled="isSaving"
-            @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
-            accept="image/*"
-            class="input-file"
-          >
-          <p v-if="isInitial">Drag your file(s) here to begin or click to browse</p>
-          <p v-if="isSaving">Uploading {{ fileCount }} files...</p>
+        <p class="separator">or</p>
+        <div class="form_field">
+          <v-input
+            placeholderTxt="e.g. 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A"
+            inputType="text"
+            inputName="hash"
+            inputLabel="Content Hash"
+            v-model="hash"
+            ref="inputHash"
+          />
         </div>
-        <div class="txt-folder">
-          <label for="text">Folder Path</label>
-          <input type="text" class="returnUpload">
+        <div class="form_control">
+          <button type="submit" class="btn btn--alert" @click="reset()">Cancel</button>
+          <button type="submit" class="btn btn--success" @click="save()">Index content</button>
         </div>
-        <div class="txt-aling">
-          <label for="text">Content Hash</label>
-          <input type="text" class="returnUpload">
-        </div>
-        <div class="btn-form">
-          <button type="button" class="btn-cancel">Cancel</button>
-          <button type="button" class="btn-index">Index content</button>
-        </div>
-      </form>
+      </div>
+    </form>
+    <div v-if="hasExceptions" class="errors">
+      <ul class="errors-list">
+        <li v-for="(exception, index) in this.exceptions" :key="index">{{ exception }}</li>
+      </ul>
     </div>
   </div>
 </template>
 
-<!-- Javascript -->
 <script>
-// import { upload } from './file-upload.service';
+import Input from '@/components/Input'
+import FileInput from '@/components/FileInput'
+import Indexer from 'janusndxr'
+import IndexRequest from 'janusndxr/dist/src/Domain/Entity/IndexRequest'
+import SpiderConfig from 'janusndxr/dist/src/Domain/Entity/SpiderConfig'
+import jsonConfig from '../utils/web3Config.json'
+import { mapState } from 'vuex'
 
 const STATUS_INITIAL = 0
 const STATUS_SAVING = 1
@@ -51,16 +50,23 @@ const STATUS_SUCCESS = 2
 const STATUS_FAILED = 3
 
 export default {
-  name: 'app',
+  name: 'FormIndexer',
+  components: {
+    'v-input': Input,
+    'v-file-input': FileInput
+  },
   data () {
     return {
-      uploadedFiles: [],
-      uploadError: null,
-      currentStatus: null,
-      uploadFieldName: 'photos'
+      attemptSubmit: false,
+      exceptions: [],
+      hash: '',
+      files: []
     }
   },
   computed: {
+    hasExceptions: function () {
+      return this.exceptions.length > 0
+    },
     isInitial () {
       return this.currentStatus === STATUS_INITIAL
     },
@@ -72,167 +78,98 @@ export default {
     },
     isFailed () {
       return this.currentStatus === STATUS_FAILED
-    }
+    },
+    ...mapState({
+      account: state => state.web3.account,
+      provider: state => state.web3.instance
+    })
   },
   methods: {
+    handleSubmit (e) {
+      this.attemptSubmit = true
+    },
     reset () {
       // reset form to initial state
       this.currentStatus = STATUS_INITIAL
       this.uploadedFiles = []
       this.uploadError = null
+      this.hash = ''
+      this.folder = ''
     },
-    save (formData) {
+    save () {
       // upload data to the server
       this.currentStatus = STATUS_SAVING
-
-      // upload(formData)
-      //   .then(x => {
-      //     this.uploadedFiles = [].concat(x)
-      //     this.currentStatus = STATUS_SUCCESS
-      //   })
-      //   .catch(err => {
-      //     this.uploadError = err.response
-      //     this.currentStatus = STATUS_FAILED
-      //   })
+      this.upload()
+        .then(x => {
+          console(x)
+          this.uploadedFiles = [].concat(x)
+          this.currentStatus = STATUS_SUCCESS
+        })
+        .catch(err => {
+          this.uploadError = err.response
+          this.currentStatus = STATUS_FAILED
+        })
     },
-    filesChange (fieldName, fileList) {
-      // handle file changes
-      const formData = new FormData()
+    upload () {
+      let config = new SpiderConfig()
+      config.RpcHost = jsonConfig.EthereumRpcHost
+      config.RpcPort = jsonConfig.EthereumRpcPort
+      config.ipfsHost = jsonConfig.IpfsRpcHost
+      config.ipfsPort = jsonConfig.IpfsRpcPort
+      config.indexerSmAbi = jsonConfig.indexerSmAbi
+      config.indexerSmAddress = jsonConfig.indexerSmAddress
+      config.Web3Provider = this.provider.givenProvider
 
-      if (!fileList.length) return
-
-      // append the files to FormData
-      Array.from(Array(fileList.length).keys()).map(x => {
-        formData.append(fieldName, fileList[x], fileList[x].name)
-      })
-
-      // save it
-      this.save(formData)
+      let indexRequest = new IndexRequest()
+      if (this.file !== '') {
+        indexRequest.Content = this.file
+        indexRequest.ContentType = 'file'
+      } else if (this.folder !== '') {
+        indexRequest.Content = this.folder
+        indexRequest.ContentType = 'folder'
+      } else {
+        indexRequest.Content = this.hash
+        indexRequest.ContentType = 'hash'
+      }
+      let indexer = new Indexer(this.account, config)
+      // indexer.AddContent(indexRequest, indexResult => {
+      //  console.log(indexResult)
+      // })
+      console.log(this.files)
+      console.log(indexer)
     }
   },
   mounted () {
     this.reset()
+    this.$on('fileinput', (value) => console.log(value))
   }
 }
 </script>
 
-<!-- SASS styling -->
-<style>
-.dropbox {
-  outline-offset: -10px;
-  background: rgb(214, 222, 222);
-  color: var(--color-gray);
-  padding: 0px 0px;
-  display: flex;
-  position: relative;
-  cursor: pointer;
-  border-radius: 100px;
-  width: 50%;
+<style scoped>
+.content {
+  max-width: 1024px;
   margin: auto;
-}
-
-.input-file {
-  opacity: 0; /* invisible but it's there! */
-  width: 100%;
-  height: 100px;
-  position: absolute;
-  cursor: pointer;
-  top: 0%;
-  right: 0%;
-}
-
-.dropbox:hover {
-  background: var(--color-gray); /* when mouse over to the drop zone, change color */
-}
-
-.dropbox p {
-  font-size: 1.2em;
-  text-align: center;
-  margin: auto;
-  padding: 15px;
-}
-.metaMask {
-  padding: 0px 0px;
-  position: relative;
-  border-radius: 20px;
-  margin-bottom: 17px;
-  width: 600px;
-  height: 30px;
-}
-
-.returnUpload {
-  padding: 0px 0px;
-  position: relative;
-  border-radius: 20px;
-  width: 600px;
-  height: 30px;
-}
-label {
-  margin-top: 40px;
-  margin: 0;
-  padding: 0;
-  color: var(--color-gray);
-  display: block;
-}
-.txt-wallet {
-  text-align: left;
-}
-.txt-folder {
-  text-align: left;
-}
-.txt-content {
-  text-align: left;
-}
-.txt-aling {
-  margin-top: 10px;
-  text-align: left;
 }
 .form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 60%;
+  margin: 0 auto 100px;
 }
-.btn-cancel {
-  color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
-  font-weight: 400;
-  text-align: center;
+.form_field {
+  position: relative;
+}
+.form_control {
+  text-align: right;
+}
+.separator::before,
+.separator::after {
+  content: '';
+  height: 1px;
+  width: 40%;
+  display: inline-block;
+  background-color: var(--color-gray);
+  position: relative;
+  margin: 0 5px;
   vertical-align: middle;
-  user-select: none;
-  border: 1px solid transparent;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 20rem;
-  transition: color 0.15s ease-in-out;
-  background-color: 15s ease-in-out;
-  border-color: 0.15s ease-in-out;
-  box-shadow: 0.15s ease-in-out;
-  cursor: pointer;
-  margin-right: 15px;
-}
-.btn-index {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
-  font-weight: 400;
-  text-align: center;
-  vertical-align: middle;
-  user-select: none;
-  border: 1px solid transparent;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 20rem;
-  transition: color 0.15s ease-in-out;
-  background-color: 15s ease-in-out;
-  border-color: 0.15s ease-in-out;
-  box-shadow: 0.15s ease-in-out;
-  cursor: pointer;
-}
-.btn-form {
-  margin-left: 395px;
-  padding: 10px;
 }
 </style>
