@@ -7,7 +7,7 @@
                         <div class="modal-header">
                             <slot name="header">
                                 <h3> Sign In </h3>
-                                <button class="modal-close-button" @click="closeModal">X</button>
+                                <!-- <button class="modal-close-button" @click="closeModal">X</button> -->
                             </slot>
                         </div>
                         <div class="modal-body">
@@ -26,7 +26,7 @@
                                   Connect with MetaMask
                                 </button>
                                 <div class="modal-error-message" v-if="showError">
-                                    <p>Não foi possivel efetuar o acesso, tente novamente mais tarde.</p>
+                                    <p>Could not log in, try again later.</p>
                                 </div>
                             </slot>
                         </div>
@@ -39,10 +39,17 @@
 
 <script>
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Modal',
   components: {},
+  computed: {
+     ...mapState({
+      userID: state => state.profile.userID,
+      data: state => state.profile.data
+    })
+  },
   methods: {
     closeModal: function () {
       this.showModal = false
@@ -62,6 +69,7 @@ export default {
         if (event.response) {
           axios.post(process.env.IDENTITY_BASE_URL, {'token': event.response})
             .then((response) => {
+              console.log(response.data)
               this.closeModal()
             }, () => {
               this.showError = true
@@ -116,7 +124,7 @@ export default {
 
 .modal-header h3 {
   margin-top: 0;
-  color: #3AB03E;
+  color: #5436D6;
 }
 
 .modal-body p {
@@ -137,7 +145,7 @@ export default {
 .modal-error-message {
     text-align: center;
     padding-top: 20px;
-    color: #800000;
+    color: var(--color-red);
 }
 
 .modal-button {
