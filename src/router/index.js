@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/view/Home'
 import NotFound from '@/view/NotFound'
 import About from '@/view/About'
+import Profile from '@/view/Profile'
 import FormUploadExample from '@/components/FormUploadExample'
 
 Vue.use(Router)
@@ -28,6 +29,11 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
     },
     { path: '*', redirect: '/404' }
   ]

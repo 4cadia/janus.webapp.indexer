@@ -45,7 +45,7 @@ export default {
   name: 'Modal',
   components: {},
   computed: {
-     ...mapState({
+    ...mapState({
       userID: state => state.profile.userID,
       data: state => state.profile.data
     })
@@ -70,7 +70,9 @@ export default {
           axios.post(process.env.IDENTITY_BASE_URL, {'token': event.response})
             .then((response) => {
               console.log(response.data)
+              this.$store.commit('profile/setResponse', response.data)
               this.closeModal()
+              this.$router.push({ name: 'Profile' })
             }, () => {
               this.showError = true
             })
