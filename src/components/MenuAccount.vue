@@ -15,6 +15,7 @@
 <script>
 import Modal from '@/components/Modal'
 import { mapState } from 'vuex'
+import { setTimeout } from 'timers'
 
 export default {
 

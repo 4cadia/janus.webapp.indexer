@@ -17,6 +17,7 @@
                                 </p>
                             </slot>
                         </div>
+                        <loader v-if="this.isLoading"></loader>
                         <div class="modal-footer">
                             <slot name="footer">
                                 <button class="modal-button civic logo-civic" @click="handleCivic" v-bind:class="{'button-disabled': disableCivic}">
@@ -24,6 +25,9 @@
                                 </button>
                                 <button class="modal-button metamask logo-metamask" @click="handleMetaMask" v-bind:class="{'button-disabled': disableMetamask}">
                                   Connect with MetaMask
+                                </button>
+                                <button class="modal-button uPort logo-uPort" @click="handleuPort" v-bind:class="{'button-disabled': disableuPort}">
+                                  Connect with uPort
                                 </button>
                                 <div class="modal-error-message" v-if="showError">
                                     <p>Could not log in, try again later.</p>
@@ -38,12 +42,15 @@
 </template>
 
 <script>
+import Loader from '@/components/Loader'
 import axios from 'axios'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Modal',
-  components: {},
+  components: {
+    'loader': Loader
+  },
   computed: {
     ...mapState({
       userID: state => state.profile.userID,
@@ -57,8 +64,14 @@ export default {
     openModal: function () {
       this.showModal = true
     },
+    loading: function () {
+      this.isLoading = true
+    },
     handleMetaMask: function () {
       console.log('ok')
+    },
+    handleuPort: function () {
+      console.log('clicou')
     },
     handleCivic: function () {
       /* global Civic */
@@ -67,6 +80,7 @@ export default {
       civicSip.signup({style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP})
       civicSip.on('auth-code-received', event => {
         if (event.response) {
+           this.loading()
           axios.post(process.env.IDENTITY_BASE_URL, {'token': event.response})
             .then((response) => {
               console.log(response.data)
@@ -84,8 +98,10 @@ export default {
     return {
       showModal: false,
       showError: false,
+      isLoading: false,
       disableCivic: process.env.DISABLE_IDENTITY_CIVIC,
-      disableMetamask: process.env.DISABLE_IDENTITY_METAMASK
+      disableMetamask: process.env.DISABLE_IDENTITY_METAMASK,
+      disableuPort: process.env.DISABLE_IDENTITY_UPORT
     }
   }
 }
@@ -127,6 +143,10 @@ export default {
 .modal-header h3 {
   margin-top: 0;
   color: #5436D6;
+}
+
+.modal-body {
+  margin-bottom: 25px;
 }
 
 .modal-body p {
@@ -175,6 +195,11 @@ export default {
   background-size: 23px;
 }
 
+.modal-button.uPort {
+  background: url("../assets/uport-logo.png")  no-repeat 15px center, #5c50ca;
+  background-size: 23px;
+}
+
 .modal-button-metamask {
   width: 240px;
   height: 44px;
@@ -206,7 +231,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 15%;
+  margin-top: 12px;
 }
 
 .button-disabled {
