@@ -107,7 +107,7 @@ export default {
       required: true
     },
     value: {
-      type: String,
+      type: Array,
       required: true
     },
     accept: {

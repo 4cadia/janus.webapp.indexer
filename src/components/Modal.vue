@@ -80,10 +80,9 @@ export default {
       civicSip.signup({style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP})
       civicSip.on('auth-code-received', event => {
         if (event.response) {
-           this.loading()
+          this.loading()
           axios.post(process.env.IDENTITY_BASE_URL, {'token': event.response})
             .then((response) => {
-              console.log(response.data)
               this.$store.commit('profile/setResponse', response.data)
               this.closeModal()
               this.$router.push({ name: 'Profile' })

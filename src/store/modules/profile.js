@@ -1,16 +1,13 @@
 // initial state
 const state = {
-  userID: [],
+  userId: [],
   data: [],
-  response: []
+  response: [],
+  authenticated: false
 }
 
 // getters
 const getters = {
-  //   getErrors: state => state.errors,
-  //   getErrorByType: (state, getters) => (type) => {
-  //     return state.errors.find(error => error.type === type).text
-  //   }
 }
 
 // actions
@@ -18,16 +15,20 @@ const actions = {}
 
 // mutations
 const mutations = {
-  setUserID (state, userID) {
-    state.userID = userID
+  setUserId (state, userId) {
+    state.userId = userId
   },
   setData (state, data) {
     state.data = data
   },
+  setAuthentication (state, authenticated) {
+    state.authenticated = authenticated
+  },
   setResponse (state, response) {
     state.response = response
-    state.userID = response.userID
+    state.userId = response.userId
     state.data = response.data
+    state.authenticated = response.userId.length > 0
   }
 }
 

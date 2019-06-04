@@ -17,25 +17,23 @@
 
 <script>
 import { mapState } from 'vuex'
-
 export default {
   name: 'Profile',
   components: {},
   computed: {
     ...mapState({
-      //      userID: state => state.profile.userID,
-      //      data: state => state.profile.data,
-
+      userID: state => state.profile.userID,
+      data: state => state.profile.data
     })
   },
   methods: {},
   data () {
     return {
-      userId: 'ba0a0f0f655fc07c59a2b789fe17149f56bf8b2853697b9814de969d6e21abf6',
-      data: [
-        {'value': 'victoria@janusproj.com'},
-        {'value': '+55 11960794437'}
-      ]
+      // userId: 'ba0a0f0f655fc07c59a2b789fe17149f56bf8b2853697b9814de969d6e21abf6',
+      // data: [
+      //   {'value': 'victoria@janusproj.com'},
+      //   {'value': '+55 11960794437'}
+      // ]
     }
   }
 }
