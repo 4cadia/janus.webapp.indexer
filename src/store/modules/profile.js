@@ -28,7 +28,12 @@ const mutations = {
     state.response = response
     state.userId = response.userId
     state.data = response.data
-    state.authenticated = response.userId.length > 0
+    if (response.userId !== undefined && response.userId.length > 0) {
+      state.authenticated = true
+    } else {
+      state.authenticated = false
+    }
+    console.log('setResponse ', state.data)
   }
 }
 

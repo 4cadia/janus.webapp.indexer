@@ -23,7 +23,7 @@
                                 <button class="modal-button civic logo-civic" @click="handleCivic" v-bind:class="{'button-disabled': disableCivic}">
                                     Connect with Civic
                                 </button>
-                                <button class="modal-button metamask logo-metamask" @click="handleMetaMask" v-bind:class="{'button-disabled': disableMetamask}">
+                                <button class="modal-button metamask logo-metamask" @click="handleMetaMask" v-bind:class="{'button-disabled': disableMetaMask}">
                                   Connect with MetaMask
                                 </button>
                                 <button class="modal-button uPort logo-uPort" @click="handleuPort" v-bind:class="{'button-disabled': disableuPort}">
@@ -51,10 +51,16 @@ export default {
   components: {
     'loader': Loader
   },
+  created: function () {
+    if (this.activeAccount === undefined) {
+      this.disableMetaMask = true
+    }
+  },
   computed: {
     ...mapState({
       userID: state => state.profile.userID,
-      data: state => state.profile.data
+      data: state => state.profile.data,
+      activeAccount: state => state.web3.account
     })
   },
   methods: {
@@ -64,11 +70,22 @@ export default {
     openModal: function () {
       this.showModal = true
     },
-    loading: function () {
-      this.isLoading = true
-    },
     handleMetaMask: function () {
-      console.log('ok')
+      if (this.activeAccount !== undefined) {
+        let originalCookie = this.activeAccount
+        // console.log(originalCookie)
+        axios.post(process.env.IDENTITY_BASE_URL, {'token': this.activeAccount})
+          .then((response) => {
+            // console.log(response.data)
+            this.$store.commit('profile/setResponse', response.data)
+            document.cookie = 'janusToken=' + originalCookie
+            this.closeModal()
+            this.$router.push({ name: 'Home' })
+          }, () => {
+            this.showError = true
+          })
+      }
+      this.$store.dispatch('web3/registerWeb3')
     },
     handleuPort: function () {
       console.log('clicou')
@@ -76,16 +93,22 @@ export default {
     handleCivic: function () {
       /* global Civic */
       /* eslint no-undef: "error" */
+      this.isLoading = true
       let civicSip = new Civic({appId: process.env.CIVICID})
       civicSip.signup({style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP})
       civicSip.on('auth-code-received', event => {
         if (event.response) {
           this.loading()
+          // console.log(event.response)
+          let originalCookie = event.response
           axios.post(process.env.IDENTITY_BASE_URL, {'token': event.response})
             .then((response) => {
+              console.log(response.data)
               this.$store.commit('profile/setResponse', response.data)
+              document.cookie = 'janusToken=' + originalCookie
               this.closeModal()
-              this.$router.push({ name: 'Profile' })
+              this.isLoading = false
+              this.$router.push({ name: 'Home' })
             }, () => {
               this.showError = true
             })
@@ -99,7 +122,7 @@ export default {
       showError: false,
       isLoading: false,
       disableCivic: process.env.DISABLE_IDENTITY_CIVIC,
-      disableMetamask: process.env.DISABLE_IDENTITY_METAMASK,
+      disableMetaMask: process.env.DISABLE_IDENTITY_METAMASK,
       disableuPort: process.env.DISABLE_IDENTITY_UPORT
     }
   }
