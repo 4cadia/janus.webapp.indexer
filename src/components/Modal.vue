@@ -51,11 +51,6 @@ export default {
   components: {
     'loader': Loader
   },
-  created: function () {
-    if (this.activeAccount === undefined) {
-      this.disableMetaMask = true
-    }
-  },
   computed: {
     ...mapState({
       userID: state => state.profile.userID,
@@ -71,20 +66,23 @@ export default {
       this.showModal = true
     },
     handleMetaMask: function () {
-      if (this.activeAccount !== undefined) {
-        let originalCookie = this.activeAccount
-        // console.log(originalCookie)
-        axios.post(process.env.IDENTITY_BASE_URL, {'token': this.activeAccount})
-          .then((response) => {
-            // console.log(response.data)
-            this.$store.commit('profile/setResponse', response.data)
-            document.cookie = 'janusToken=' + originalCookie
-            this.closeModal()
-            this.$router.push({ name: 'Home' })
-          }, () => {
-            this.showError = true
-          })
+      console.log('activeAccount ', this.activeAccount)
+      if (typeof this.activeAccount === 'undefined' || this.activeAccount === null) {
+        alert('Você precisa instalar o MetaMask para usar esta opção de login')
+        return
       }
+      let originalCookie = this.activeAccount
+      // console.log(originalCookie)
+      axios.post(process.env.IDENTITY_BASE_URL, {'token': this.activeAccount})
+        .then((response) => {
+          // console.log(response.data)
+          this.$store.commit('profile/setResponse', response.data)
+          document.cookie = 'janusToken=' + originalCookie
+          this.closeModal()
+          this.$router.push({ name: 'Home' })
+        }, () => {
+          this.showError = true
+        })
       this.$store.dispatch('web3/registerWeb3')
     },
     handleuPort: function () {
@@ -98,7 +96,6 @@ export default {
       civicSip.signup({style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP})
       civicSip.on('auth-code-received', event => {
         if (event.response) {
-          this.loading()
           // console.log(event.response)
           let originalCookie = event.response
           axios.post(process.env.IDENTITY_BASE_URL, {'token': event.response})

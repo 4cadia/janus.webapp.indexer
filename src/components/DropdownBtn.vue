@@ -28,10 +28,6 @@
         <div v-else>
           <button @click="handleOpenModalAuth()"> Sign In </button>
         </div>
-
-        <!-- <button  @click="handleOpenModalAuth" v-if="!isAuthenticated">Sign In</button>
-        <button  @click="handleProfile" v-if="isAuthenticated">Profile</button>
-        <button v-if="isAuthenticated">Sign Out</button> -->
       </div>
     </div>
     <v-modal ref="modal"></v-modal>
