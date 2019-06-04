@@ -25,6 +25,7 @@ export default {
   data () {
     return {
       // activeAccount: 'Active account does not exists'
+      enableIdentity: process.env.IDENTITY
     }
   },
   computed: mapState({
@@ -33,11 +34,6 @@ export default {
   methods: {
     handleClick: function (value) {
       this.$refs.modal.openModal()
-    }
-  },
-  data: function () {
-    return {
-      enableIdentity: process.env.IDENTITY
     }
   }
 }
