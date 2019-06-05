@@ -40,21 +40,21 @@ export default {
 </script>
 
 <style scoped>
-    .profile-main{
+    .profile-main {
         display: flex;
         justify-content: center;
-
     }
-    .card-profile{
-        width: 30vw;
-        background-color: #e0e0e0;
+    .card-profile {
+        width: 25vw;
+        height: 25vh;
         margin: 5%;
         padding: 3% 0;
+       border: dashed 2px black;
     }
-    .data-list{
+    .data-list {
         display: flex;
         justify-content: center;
         padding: 1%;
-
     }
+
 </style>
