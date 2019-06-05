@@ -45,6 +45,8 @@
 import Loader from '@/components/Loader'
 import axios from 'axios'
 import { mapState } from 'vuex'
+import Web3 from 'web3'
+import { ethers } from 'ethers'
 
 export default {
   name: 'Modal',
@@ -66,24 +68,48 @@ export default {
       this.showModal = true
     },
     handleMetaMask: function () {
-      console.log('activeAccount ', this.activeAccount)
-      if (typeof this.activeAccount === 'undefined' || this.activeAccount === null) {
-        alert('Você precisa instalar o MetaMask para usar esta opção de login')
-        return
+      var signer
+      var provider
+      var web3
+      try {
+        // eslint-disable-next-line
+        web3 = new Web3(ethereum)
+        // Solicita acesso a carteira Ethereum se necessário
+        // eslint-disable-next-line
+        ethereum.enable()
+        if (typeof web3 !== 'undefined') {
+          // Use Mist/MetaMask's provider
+          provider = new ethers.providers.Web3Provider(web3.currentProvider)
+          let originalCookie = []
+          signer = provider.getSigner()
+          signer.getAddress()
+            .then((addr) => {
+              console.log(' handleMetaMask addr ', addr, ' signer ', signer)
+              originalCookie = addr
+              provider.getNetwork()
+                .then((network) => {
+                  console.log(' handleMetaMask network...', network)
+                  axios.post(process.env.IDENTITY_BASE_URL, {'token': originalCookie})
+                    .then((response) => {
+                      // console.log(response.data)
+                      this.$store.commit('profile/setResponse', response.data)
+                      document.cookie = 'janusToken=' + originalCookie
+                      this.closeModal()
+                      this.$router.push({ name: 'Home' })
+                    }, (err) => {
+                      console.log(err.response)
+                      console.log(err)
+                      console.error('handleMetaMask erro vindo do backend ', err)
+                      this.showError = true
+                    })
+                })
+            })
+        }
+      } catch (err) {
+        console.error('handleMetaMask error ', err)
+        alert('You need to have MetaMask installed or grant this page to access your account.')
       }
-      let originalCookie = this.activeAccount
       // console.log(originalCookie)
-      axios.post(process.env.IDENTITY_BASE_URL, {'token': this.activeAccount})
-        .then((response) => {
-          // console.log(response.data)
-          this.$store.commit('profile/setResponse', response.data)
-          document.cookie = 'janusToken=' + originalCookie
-          this.closeModal()
-          this.$router.push({ name: 'Home' })
-        }, () => {
-          this.showError = true
-        })
-      this.$store.dispatch('web3/registerWeb3')
     },
     handleuPort: function () {
       console.log('clicou')
