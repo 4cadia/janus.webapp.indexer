@@ -1,27 +1,38 @@
 <template>
   <div class="container">
-    <router-link to="/">
-      <img class="logo" src="../assets/ethereum.png">
-    </router-link>
-    <h1>{{title}}</h1>
     <div class="wrapper">
-      <v-form-upload class="content"/>
+      <div class="col hero">
+        <v-highlight :highlight="this.content.list_highlight[0]" float="right"/>
+      </div>
+      <div class="col" id="documentation">
+        <v-paragraph :paragraph="this.content.list_paragraph[0]">
+        </v-paragraph>
+      </div>
+      <div class="col">
+        <v-list-icon :list="this.content.list_icon[0]"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import FormUpload from '@/components/FormUpload'
+import homeContent from '../../static/content/home.json'
+import Highlight from '@/components/Highlight'
+import ListIcon from '@/components/ListIcon'
+import Paragraph from '@/components/Paragraph'
 
 export default {
   name: 'Home',
   data () {
     return {
+      content: homeContent,
       title: 'Janus Indexer'
     }
   },
   components: {
-    'v-form-upload': FormUpload
+    'v-highlight': Highlight,
+    'v-list-icon': ListIcon,
+    'v-paragraph': Paragraph
   }
 }
 </script>

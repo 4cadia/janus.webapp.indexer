@@ -22,11 +22,6 @@ export default {
   components: {
     'v-modal': Modal
   },
-  data () {
-    return {
-      // activeAccount: 'Active account does not exists'
-    }
-  },
   computed: mapState({
     activeAccount: state => state.web3.account
   }),
