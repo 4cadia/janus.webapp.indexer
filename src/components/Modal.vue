@@ -21,13 +21,13 @@
                         <div class="modal-footer">
                             <slot name="footer">
                                 <button class="modal-button civic logo-civic" @click="handleCivic" v-bind:class="{'button-disabled': disableCivic}">
-                                    Connect with Civic
+                                  Civic
                                 </button>
                                 <button class="modal-button metamask logo-metamask" @click="handleMetaMask" v-bind:class="{'button-disabled': disableMetaMask}">
-                                  Connect with MetaMask
+                                  MetaMask
                                 </button>
                                 <button class="modal-button uPort logo-uPort" @click="handleuPort" v-bind:class="{'button-disabled': disableuPort}">
-                                  Connect with uPort
+                                  uPort
                                 </button>
                                 <div class="modal-error-message" v-if="showError">
                                     <p>Could not log in, try again later.</p>
@@ -118,7 +118,8 @@ export default {
       /* global Civic */
       /* eslint no-undef: "error" */
       this.isLoading = true
-      let civicSip = new Civic({appId: process.env.CIVICID})
+      console.log(process.env.CIVICID)
+      let civicSip = new Civic({appId: `${process.env.CIVICID}`})
       civicSip.signup({style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP})
       civicSip.on('auth-code-received', event => {
         if (event.response) {
@@ -171,7 +172,7 @@ export default {
 }
 
 .modal-container {
-  width: 25vw;
+  width: 20vw;
   margin: 0 auto;
   padding: 2% 2% 4% 2% ;
   background-color: #fff;
@@ -209,56 +210,38 @@ export default {
   cursor: pointer;
 }
 
-.modal-error-message {
-    text-align: center;
-    padding-top: 20px;
-    color: var(--color-red);
-}
-
 .modal-button {
-  width: 240px;
+  width: 220px;
   height: 44px;
   font-family:'Montserrat', Helvetica, Arial, sans-serif;
-  font-size: 16;
+  font-size: 12pt;
   font-weight: 700;
   color: #FFFFFF;
   border-radius: 33px;
   border: 0;
   border: none;
-  padding: 0 5px 0 5px;
+  padding: 0 5px 0 25px;
   cursor: pointer;
   margin-top: 5%;
 }
 
+/* logo Civic */
 .modal-button.civic {
   background: url("../assets/civic-logo.png")  no-repeat 15px center, #3AB03E;
   background-size: 23px;
 }
 
+/* logo MetaMask */
 .modal-button.metamask {
   background: url("../assets/metamask-logo.png")  no-repeat 15px center, #F79220;
   background-size: 23px;
+  padding: 0 6px 0 20px;
 }
 
+/* logo uPort */
 .modal-button.uPort {
   background: url("../assets/uport-logo.png")  no-repeat 15px center, #5c50ca;
   background-size: 23px;
-}
-
-.modal-button-metamask {
-  width: 240px;
-  height: 44px;
-  font-family:'Montserrat', Helvetica, Arial, sans-serif;
-  font-size: 16;
-  font-weight: 700;
-  background-color: #F79220;
-  color: #FFFFFF;
-  border-radius: 33px;
-  border: 0;
-  border: none;
-  padding: 0 5px 0 5px;
-  cursor: pointer;
-  margin-top: 5%;
 }
 
 .modal-close-button {
@@ -269,7 +252,6 @@ export default {
   padding: 0 8px 0 ;
   cursor: pointer;
   font-weight: 800;
-  font-size: 12pt;
 }
 
 .modal-footer {
@@ -279,8 +261,13 @@ export default {
   margin-top: 12px;
 }
 
+.modal-error-message {
+    text-align: center;
+    padding-top: 20px;
+    color: var(--color-red);
+}
+
 .button-disabled {
   background: silver !important;
 }
-
 </style>
