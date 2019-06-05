@@ -19,21 +19,17 @@ export default {
       activeAccount: state => state.web3.account,
       isAuthenticated: state => state.profile.authenticated
     })
+  },
   data () {
     return {
       // activeAccount: 'Active account does not exists'
-      enableIdentity: process.env.IDENTITY
+      enableIdentity: process.env.IDENTITY,
+      signIn: false
     }
   },
   methods: {
     handleClick: function (value) {
       this.$refs.dropdown.openDropDown()
-    }
-  },
-  data: function () {
-    return {
-      enableIdentity: process.env.IDENTITY,
-      signIn: false
     }
   }
 }
@@ -66,5 +62,4 @@ export default {
   width: 100%;
   height: 100%;
 }
-
 </style>
