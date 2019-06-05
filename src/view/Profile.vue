@@ -20,50 +20,43 @@
 
 <script>
 import { mapState } from 'vuex'
-import ScoreProfile from '../components/ScoreProfile';
-
+import ScoreProfile from '../components/ScoreProfile'
 
 export default {
   name: 'Profile',
   components: {
-    'v-score-profile': ScoreProfile 
+    'v-score-profile': ScoreProfile
   },
   computed: {
     ...mapState({
-      //      userID: state => state.profile.userID,
-      //      data: state => state.profile.data,
-
+      userID: state => state.profile.userID,
+      data: state => state.profile.data
     })
   },
   methods: {},
   data () {
     return {
-      userId: 'ba0a0f0f655fc07c59a2b789fe17149f56bf8b2853697b9814de969d6e21abf6',
-      data: [
-        {'value': 'victoria@janusproj.com'},
-        {'value': '+55 11960794437'}
-      ]
     }
   }
 }
 </script>
 
 <style scoped>
-    .profile-main{
+    .profile-main {
         display: flex;
         justify-content: center;
-
     }
-    .card-profile{
-        width: 30vw;
-        background-color: #e0e0e0;
+    .card-profile {
+        width: 25vw;
+        height: 25vh;
         margin: 5%;
         padding: 3% 0;
+       border: dashed 2px black;
     }
-    .data-list{
+    .data-list {
         display: flex;
         justify-content: center;
         padding: 1%;
-
     }
+
 </style>
