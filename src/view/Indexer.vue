@@ -2,7 +2,7 @@
   <div class="container">
     <h1>{{title}}</h1>
     <div class="wrapper">
-      <v-form-upload class="content"/>
+      <v-form-upload/>
     </div>
   </div>
 </template>

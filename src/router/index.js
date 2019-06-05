@@ -4,6 +4,7 @@ import Home from '@/view/Home'
 import Indexer from '@/view/Indexer'
 import NotFound from '@/view/NotFound'
 import About from '@/view/About'
+import Profile from '@/view/Profile'
 import FormUploadExample from '@/components/FormUploadExample'
 
 Vue.use(Router)
@@ -34,6 +35,11 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
     },
     { path: '/documentation', redirect: '/' },
     { path: '*', redirect: '/404' }

@@ -1,7 +1,8 @@
 {
-  "list_highlight": [
+  "list_hero": [
     {
-      "title": "About",
+      "title": "Janus Indexer",
+      "text": "<p>We present Janus Platform, a Ethereum Blockchain system that will lead you to the future of descentralized web. Here you will be able to store and find content on the Web 3.0.</p><p><em>The future is here</em></p>",
       "image": "./static/images/janus.png"
     }
   ],

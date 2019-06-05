@@ -23,15 +23,10 @@
         </div>
         <div class="form_control">
           <button type="submit" class="btn btn--alert" @click="reset()">Cancel</button>
-          <button type="submit" class="btn btn--success" @click="save()">Index content</button>
+          <button type="submit" class="btn btn--success" @click="save()">Index Content</button>
         </div>
       </div>
     </form>
-    <div v-if="hasExceptions" class="errors">
-      <ul class="errors-list">
-        <li v-for="(exception, index) in this.exceptions" :key="index">{{ exception }}</li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -40,8 +35,6 @@ import Input from '@/components/Input'
 import FileInput from '@/components/FileInput'
 import Indexer from 'janusndxr'
 import IndexRequest from 'janusndxr/dist/src/Domain/Entity/IndexRequest'
-import SpiderConfig from 'janusndxr/dist/src/Domain/Entity/SpiderConfig'
-import jsonConfig from '../utils/web3Config.json'
 import { mapState } from 'vuex'
 
 const STATUS_INITIAL = 0
@@ -58,15 +51,12 @@ export default {
   data () {
     return {
       attemptSubmit: false,
-      exceptions: [],
       hash: '',
-      files: []
+      files: [],
+      ipfsLinkHash: []
     }
   },
   computed: {
-    hasExceptions: function () {
-      return this.exceptions.length > 0
-    },
     isInitial () {
       return this.currentStatus === STATUS_INITIAL
     },
@@ -91,57 +81,59 @@ export default {
     reset () {
       // reset form to initial state
       this.currentStatus = STATUS_INITIAL
-      this.uploadedFiles = []
+      this.files = []
       this.uploadError = null
       this.hash = ''
-      this.folder = ''
+      this.ipfsLinkHash = []
     },
     save () {
+      if (this.files.length === 0 && this.hash === '') {
+        this.currentStatus = STATUS_FAILED
+        this.$notification.error('Zip file or Content Hash must be filled!')
+        return
+      }
       // upload data to the server
       this.currentStatus = STATUS_SAVING
       this.upload()
-        .then(x => {
-          console(x)
-          this.uploadedFiles = [].concat(x)
-          this.currentStatus = STATUS_SUCCESS
-        })
-        .catch(err => {
-          this.uploadError = err.response
-          this.currentStatus = STATUS_FAILED
-        })
     },
     upload () {
-      let config = new SpiderConfig()
-      config.RpcHost = jsonConfig.EthereumRpcHost
-      config.RpcPort = jsonConfig.EthereumRpcPort
-      config.ipfsHost = jsonConfig.IpfsRpcHost
-      config.ipfsPort = jsonConfig.IpfsRpcPort
-      config.indexerSmAbi = jsonConfig.indexerSmAbi
-      config.indexerSmAddress = jsonConfig.indexerSmAddress
-      config.Web3Provider = this.provider.givenProvider
-
       let indexRequest = new IndexRequest()
-      if (this.file !== '') {
-        indexRequest.Content = this.file
-        indexRequest.ContentType = 'file'
-      } else if (this.folder !== '') {
-        indexRequest.Content = this.folder
-        indexRequest.ContentType = 'folder'
+      indexRequest.Address = this.account
+      if (this.files.length > 0) {
+        indexRequest.Content = this.files[0]
+        indexRequest.ContentType = 'zip'
       } else {
         indexRequest.Content = this.hash
         indexRequest.ContentType = 'hash'
       }
-      let indexer = new Indexer(this.account, config)
-      // indexer.AddContent(indexRequest, indexResult => {
-      //  console.log(indexResult)
-      // })
-      console.log(this.files)
-      console.log(indexer)
+
+      let indexer = new Indexer(this.provider.web3().currentProvider)
+      indexer.AddContent(indexRequest, indexResult => {
+        if (indexResult.Success) {
+          for (let index = 0; index < indexResult.IndexedFiles.length; index++) {
+            debugger
+            const file = indexResult.IndexedFiles[index]
+            this.ipfsLinkHash.push(file.IpfsHash)
+            if (file.Errors.length > 0) {
+              for (let index = 0; index < file.Errors.length; index++) {
+                const error = file.Errors[index]
+                this.$notification.warning(error)
+              }
+            } else {
+              this.$notification.success(`The file ${file.HtmlData.Titulo} was successfully added`)
+            }
+          }
+        } else {
+          for (let index = 0; index < indexResult.Errors.length; index++) {
+            const error = indexResult.Errors[index]
+            this.$notification.error(error)
+          }
+        }
+      })
     }
   },
   mounted () {
     this.reset()
-    this.$on('fileinput', (value) => console.log(value))
   }
 }
 </script>
@@ -171,5 +163,52 @@ export default {
   position: relative;
   margin: 0 5px;
   vertical-align: middle;
+}
+.alert {
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  transition: all ease-in-out .5s;
+}
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+.alert-success {
+  color: #1c7223;
+  background-color: #d7f8dd;
+  border-color: #c6f5ca;
+}
+.alert-link {
+  font-weight: 700;
+  color: #491217;
+}
+.invisible {
+  opacity: 0;
+  padding: 0;
+  font-size: 0;
+}
+.close {
+  float: right;
+  font-size: 16;
+  font-weight: 100%;
+  line-height: 1;
+  text-shadow: black;
+  opacity: .5;
+}
+.close-danger{
+  color: red;
+}
+.close.success{
+  color: green;
+}
+button.close {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  -webkit-appearance: none;
 }
 </style>
