@@ -1,17 +1,5 @@
 <template>
   <div class="content">
-    <div v-if="hasExceptions" class="alert alert-danger errors" id="alert-danger">
-       <button class="alert-link close" @click="handleDismissDanger">x</button>
-       <ul class="errors-list">
-        <li v-for="(exception, index) in this.exceptions" :key="index">{{ exception }}</li>
-      </ul>
-    </div>
-    <div v-if="hasSuccess" class="alert alert-success" id="alert-sucess">
-       <button class="alert-link close" @click="handleDismissSucess">x</button>
-       <ul>
-        <li v-for="(success, index) in this.success" :key="index">{{ success }}</li>
-      </ul>
-    </div>
     <form @submit.prevent="handleSubmit" class="form">
       <div class="form_content">
         <div class="form_field">
@@ -35,15 +23,10 @@
         </div>
         <div class="form_control">
           <button type="submit" class="btn btn--alert" @click="reset()">Cancel</button>
-          <button type="submit" class="btn btn--success" @click="save()">Index content</button>
+          <button type="submit" class="btn btn--success" @click="save()">Index Content</button>
         </div>
       </div>
     </form>
-    <div v-if="hasExceptions" class="errors">
-      <ul class="errors-list">
-        <li v-for="(exception, index) in this.exceptions" :key="index">{{ exception }}</li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -68,19 +51,12 @@ export default {
   data () {
     return {
       attemptSubmit: false,
-      exceptions: [],
-      success: [],
       hash: '',
-      files: []
+      files: [],
+      ipfsLinkHash: []
     }
   },
   computed: {
-    hasExceptions: function () {
-      return this.exceptions.length > 0
-    },
-    hasSuccess: function () {
-      return this.success.length > 0
-    },
     isInitial () {
       return this.currentStatus === STATUS_INITIAL
     },
@@ -108,31 +84,17 @@ export default {
       this.files = []
       this.uploadError = null
       this.hash = ''
-      this.exceptions = []
-      this.success = []
+      this.ipfsLinkHash = []
     },
     save () {
-      this.exceptions = []
-      this.success = []
       if (this.files.length === 0 && this.hash === '') {
         this.currentStatus = STATUS_FAILED
-        this.exceptions.push('Zip file or Content Hash must be filled!')
-        this.showMessage('alert-danger')
+        this.$notification.error('Zip file or Content Hash must be filled!')
         return
       }
       // upload data to the server
       this.currentStatus = STATUS_SAVING
       this.upload()
-      // .then(x => {
-      //   console(x)
-      //   debugger
-      //   this.uploadedFiles = [].concat(x)
-      //   this.currentStatus = STATUS_SUCCESS
-      // })
-      // .catch(err => {
-      //   this.uploadError = err.response
-      //   this.currentStatus = STATUS_FAILED
-      // })
     },
     upload () {
       let indexRequest = new IndexRequest()
@@ -146,43 +108,32 @@ export default {
       }
 
       let indexer = new Indexer(this.provider.web3().currentProvider)
-      let ndxrResult = {}
       indexer.AddContent(indexRequest, indexResult => {
-        ndxrResult = indexResult
-        if (indexResult.Errors.length > 0) {
-          for (let index = 0; index < indexResult.Errors.length; index++) {
-            this.exceptions.push(indexResult.Errors[index])
+        if (indexResult.Success) {
+          for (let index = 0; index < indexResult.IndexedFiles.length; index++) {
+            debugger
+            const file = indexResult.IndexedFiles[index]
+            this.ipfsLinkHash.push(file.IpfsHash)
+            if (file.Errors.length > 0) {
+              for (let index = 0; index < file.Errors.length; index++) {
+                const error = file.Errors[index]
+                this.$notification.warning(error)
+              }
+            } else {
+              this.$notification.success(`The file ${file.HtmlData.Titulo} was successfully added`)
+            }
           }
-          this.showMessage('alert-danger')
         } else {
-          for (let index = 0; index < indexResult.IndexedFiles; index++) {
-            this.success.push(indexResult.Success[index])
+          for (let index = 0; index < indexResult.Errors.length; index++) {
+            const error = indexResult.Errors[index]
+            this.$notification.error(error)
           }
-          this.showMessage('alert-success')
         }
       })
-      return ndxrResult
-    },
-    handleDismissDanger () {
-      this.exceptions = []
-      this.dismissMessage('alert-danger')
-    },
-    handleDismissSucess () {
-      this.success = []
-      this.dismissSuccess('alert-success')
-    },
-    dismissMessage (elementID) {
-      var element = document.getElementById(elementID)
-      element.classList.toggle('invisible', true)
-    },
-    showMessage (elementID) {
-      var element = document.getElementById(elementID)
-      element.classList.toogle('invisible', false)
     }
   },
   mounted () {
     this.reset()
-    this.$on('fileinput', (value) => console.log(value))
   }
 }
 </script>
