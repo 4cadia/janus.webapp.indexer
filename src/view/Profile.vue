@@ -10,6 +10,9 @@
             <li class="data-list" v-for="(item, index) in data" :key="index">
                 <p>{{item.value}}</p>
             </li>
+            <li>
+              <v-score-profile :profile-data="data" ></v-score-profile>
+            </li>
             </ul>
         </div>
     </div>
@@ -17,9 +20,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import ScoreProfile from '../components/ScoreProfile'
+
 export default {
   name: 'Profile',
-  components: {},
+  components: {
+    'v-score-profile': ScoreProfile
+  },
   computed: {
     ...mapState({
       userID: state => state.profile.userID,
@@ -29,11 +36,6 @@ export default {
   methods: {},
   data () {
     return {
-      // userId: 'ba0a0f0f655fc07c59a2b789fe17149f56bf8b2853697b9814de969d6e21abf6',
-      // data: [
-      //   {'value': 'victoria@janusproj.com'},
-      //   {'value': '+55 11960794437'}
-      // ]
     }
   }
 }
