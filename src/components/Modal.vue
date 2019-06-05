@@ -7,7 +7,7 @@
                         <div class="modal-header">
                             <slot name="header">
                                 <h3> Sign In </h3>
-                                <!-- <button class="modal-close-button" @click="closeModal">X</button> -->
+                                <button class="modal-close-button" @click="closeModal">X</button>
                             </slot>
                         </div>
                         <div class="modal-body">
