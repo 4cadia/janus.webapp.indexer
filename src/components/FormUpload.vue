@@ -111,7 +111,6 @@ export default {
       indexer.AddContent(indexRequest, indexResult => {
         if (indexResult.Success) {
           for (let index = 0; index < indexResult.IndexedFiles.length; index++) {
-            debugger
             const file = indexResult.IndexedFiles[index]
             this.ipfsLinkHash.push(file.IpfsHash)
             if (file.Errors.length > 0) {
