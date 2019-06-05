@@ -19,6 +19,11 @@ export default {
       activeAccount: state => state.web3.account,
       isAuthenticated: state => state.profile.authenticated
     })
+  data () {
+    return {
+      // activeAccount: 'Active account does not exists'
+      enableIdentity: process.env.IDENTITY
+    }
   },
   methods: {
     handleClick: function (value) {
