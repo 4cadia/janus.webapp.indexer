@@ -117,13 +117,13 @@ export default {
     handleCivic: function () {
       /* global Civic */
       /* eslint no-undef: "error" */
-      this.isLoading = true
       console.log(process.env.CIVICID)
       let civicSip = new Civic({appId: `${process.env.CIVICID}`})
       civicSip.signup({style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP})
       civicSip.on('auth-code-received', event => {
         if (event.response) {
           // console.log(event.response)
+          this.isLoading = true
           let originalCookie = event.response
           axios.post(process.env.IDENTITY_BASE_URL, {'token': event.response})
             .then((response) => {
