@@ -1,19 +1,28 @@
 <template>
   <div class="header">
-    <ul class="menu">
-      <li class="menu-item">
-        <router-link to="/">Home</router-link>
-      </li>
-      <li class="menu-item">
-        <router-link to="/about">About Us</router-link>
-      </li>
-      <li class="menu-item">
-        <a href="https://janusproj.atlassian.net/wiki/spaces/PAP/pages/126320921/What+s+Identity">What's identity?</a>
-      </li>
-      <li class="menu-item">
-        <menu-account />
-      </li>
-    </ul>
+    <router-link to="/" class="header_logo">
+      <img class="logo" src="../assets/images/logo_clear.png">
+      <h1 class="title">Janus</h1>
+    </router-link>
+    <div class="header_menu">
+      <ul class="menu">
+        <li class="menu-item">
+          <router-link to="/">Home</router-link>
+        </li>
+        <li class="menu-item">
+          <router-link to="/indexer">Indexer</router-link>
+        </li>
+        <li class="menu-item">
+          <router-link to="/about">About</router-link>
+        </li>
+        <li class="menu-item">
+          <a href="https://janusproj.atlassian.net/wiki/spaces/PAP/pages/126320921/What+s+Identity">Identity</a>
+        </li>
+        <li class="menu-item">
+          <menu-account />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -29,19 +38,38 @@ export default {
 
 <style scoped>
 .header {
-  padding: 20px 30px;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: space-between;
+  background: white;
+}
+.header_logo .logo {
+  width: 25px;
+}
+.header_logo .logo,
+.header_logo .title {
+  display: inline-block;
+  vertical-align: middle;
+}
+.header_logo .title {
+  margin: 0 0 0 10px;
 }
 .menu {
   position: relative;
   text-align: right;
   align-items: center;
-  justify-content: flex-end;
   display: flex;
+  margin: auto;
+  height: 100%;
 }
 .menu-item {
   display: inline-block;
 }
 .menu-item:not(:last-child) {
   margin-right: 10px;
+}
+.menu-item a {
+  text-decoration: none;
+  color: var(--color-gray);
 }
 </style>
