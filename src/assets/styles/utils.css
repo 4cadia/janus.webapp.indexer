@@ -63,6 +63,12 @@
   background: var(--color-green);
 }
 
+.btn--outline {
+  /* color: var(--color-primary); */
+  background: none;
+  border: 1px solid;
+}
+
 .errors {
   text-align: left;
   padding: 0 0 0 5px;

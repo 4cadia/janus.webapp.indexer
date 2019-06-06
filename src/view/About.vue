@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container container--about">
     <div class="wrapper">
       <div class="col full">
         <v-hero :hero="this.content.list_hero[0]" float="right" classes="highlight"/>

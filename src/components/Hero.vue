@@ -51,7 +51,6 @@ export default {
   height: 100%;
   -webkit-transform: skew(0deg, -3deg) translateY(-9%);
   transform: skew(0deg, -3deg) translateY(-9%);
-  /* background-color: var(--color-navy); */
   background-color: #202020;
 }
 .hero .hero_background:before {
