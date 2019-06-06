@@ -79,6 +79,7 @@ export default {
         ethereum.enable()
         if (typeof web3 !== 'undefined') {
           // Use Mist/MetaMask's provider
+          this.$store.dispatch('web3/registerWeb3')
           provider = new ethers.providers.Web3Provider(web3.currentProvider)
           let originalCookie = []
           signer = provider.getSigner()
