@@ -15,7 +15,7 @@
         </button>
         <div class="form_field" v-if="this.showHashInput">
           <v-input
-            placeholderTxt="e.g. 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A"
+            placeholderTxt="e.g. QmTzX8TJe14i3ic6yAzuavNzx3WAz9UXSuFMX5qqbiMQSV"
             inputType="text"
             inputName="hash"
             inputLabel="Content Hash"
@@ -54,7 +54,7 @@ export default {
     return {
       attemptSubmit: false,
       hash: '',
-      files: [],
+      files: FileList,
       ipfsLinkHash: [],
       showHashInput: false
     }
@@ -82,7 +82,7 @@ export default {
       this.attemptSubmit = true
     },
     handleShowHashInput (e) {
-      this.showHashInput = true
+      this.showHashInput = !this.showHashInput
     },
     reset () {
       // reset form to initial state
