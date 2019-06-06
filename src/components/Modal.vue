@@ -228,15 +228,14 @@ export default {
 
 /* logo Civic */
 .modal-button.civic {
-  background: url("../assets/images/civic-logo.png")  no-repeat 15px center, #3AB03E;
+  background: url("../assets/images/civic.svg")  no-repeat 15px center, #3AB03E;
   background-size: 23px;
 }
 
 /* logo MetaMask */
 .modal-button.metamask {
-  background: url("../assets/images/metamask-logo.png")  no-repeat 15px center, #F79220;
+  background: url("../assets/images/metamask-logo.svg")  no-repeat 15px center, #F79220;
   background-size: 23px;
-  padding: 0 6px 0 20px;
 }
 
 /* logo uPort */

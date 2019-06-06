@@ -23,6 +23,7 @@
             ref="inputHash"
           />
         </div> -->
+        <div v-if="this.ipfsLinkHash.length > 0"> Access your content in: <a :href="`http://ipfs.caralabs.me/ipfs/${this.ipfsLinkHash[0]}`"> {{this.ipfsLinkHash[0]}}</a></div>
         <div class="form_control">
           <button type="submit" class="btn btn--alert" @click="reset()">Cancel</button>
           <button type="submit" class="btn btn--success" @click="save()"
@@ -133,6 +134,7 @@ export default {
               }
             } else {
               this.$notification.success(`Success! Thank you for contributing with your content!`)
+              this.$notification.success(`Access your content in: http://ipfs.caralabs.me/ipfs/${this.ipfsLinkHash[0]}`, {infiniteTimer: true})
             }
           }
         } else {

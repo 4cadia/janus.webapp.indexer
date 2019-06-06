@@ -65,7 +65,7 @@ export default {
       return this.currentStatus === STATUS_FAILED
     },
     uploadMessage () {
-      let message = 'Drag your file(s) here'
+      let message = 'Drag your ZIP file here'
       if (this.isSaving) message = 'Uploading ' + this.filename
       return message
     }
