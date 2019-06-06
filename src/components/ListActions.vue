@@ -23,7 +23,8 @@ export default {
   },
   methods: {
     handleStarted: function () {
-      this.$root.$emit('getStarted')
+      // this.$root.$emit('getStarted')
+      this.$router.push({ name: 'Indexer' })
     }
   }
 }
