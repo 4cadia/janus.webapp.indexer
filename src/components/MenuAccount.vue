@@ -1,6 +1,5 @@
 <template>
   <div class="account">
-    <!-- <label>{{activeAccount}}</label> -->
     <v-dropdown ref="dropdown" :authenticated="isAuthenticated"></v-dropdown>
   </div>
 </template>

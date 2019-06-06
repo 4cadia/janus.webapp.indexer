@@ -16,7 +16,7 @@
           <router-link to="/about">About</router-link>
         </li>
         <li class="menu-item">
-          <a href="https://janusproj.atlassian.net/wiki/spaces/PAP/pages/126320921/What+s+Identity">Identity</a>
+          <a target="_blank" href="https://janusproj.atlassian.net/wiki/spaces/PAP/pages/126320921/What+s+Identity">Identity</a>
         </li>
         <li class="menu-item">
           <menu-account />

@@ -10,8 +10,10 @@
             accept=".zip"
           />
         </div>
-        <p class="separator">or</p>
-        <div class="form_field">
+        <button class="btn btn--outline" @click="handleShowHashInput()">
+          Do you have a indexed content hash?
+        </button>
+        <div class="form_field" v-if="this.showHashInput">
           <v-input
             placeholderTxt="e.g. 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A"
             inputType="text"
@@ -53,7 +55,8 @@ export default {
       attemptSubmit: false,
       hash: '',
       files: [],
-      ipfsLinkHash: []
+      ipfsLinkHash: [],
+      showHashInput: false
     }
   },
   computed: {
@@ -77,6 +80,9 @@ export default {
   methods: {
     handleSubmit (e) {
       this.attemptSubmit = true
+    },
+    handleShowHashInput (e) {
+      this.showHashInput = true
     },
     reset () {
       // reset form to initial state
@@ -151,6 +157,7 @@ export default {
 }
 .form_control {
   text-align: right;
+  margin-top: 30px;
 }
 .separator::before,
 .separator::after {

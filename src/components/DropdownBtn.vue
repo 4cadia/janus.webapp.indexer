@@ -68,6 +68,12 @@ export default {
       type: Boolean,
       required: true
     }
+  },
+  mounted: function () {
+    let modal = this.$refs.modal
+    this.$root.$on('getStarted', () => {
+      modal.openModal()
+    })
   }
 }
 </script>

@@ -130,9 +130,9 @@ export default {
   position: relative;
   text-align: left;
   margin: 20px auto;
+  color: var(--color-white);
 }
 .field_label {
-  color: var(--color-gray);
   display: block;
   width: 100%;
   text-align: center;
@@ -142,7 +142,6 @@ export default {
   padding-bottom: 0px;
   padding-left: 16px;
   padding-right: 16px;
-  color: var(--color-gray);
   background-color: var(--color-white);
   height: 3rem;
   width: 100%;
@@ -151,7 +150,6 @@ export default {
   border-width: 1px;
   border-style: solid;
   border-image: initial;
-  border-color: var(--color-gray-lighter);
   border-radius: 4px;
   box-sizing: border-box;
 }
@@ -166,12 +164,11 @@ export default {
   border-color: var(--color-red);
 }
 .content--file {
-  color: var(--color-gray);
   padding: 30px 0;
   position: relative;
   cursor: pointer;
   margin: auto;
-  border: 1px dashed var(--color-gray);
+  border: 3px dashed;
   border-radius: 10px;
   text-align: center;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
@@ -196,7 +193,7 @@ export default {
   height: 1px;
   width: 10%;
   display: inline-block;
-  background-color: var(--color-gray);
+  background-color: var(--color-white);
   position: relative;
   margin: 0 5px;
   vertical-align: middle;
@@ -209,6 +206,7 @@ export default {
   background-size: contain;
   background-repeat: no-repeat;
   text-align: center;
+  filter: invert(100%);
 }
 .file_icon--initial {
   background-image: url('../assets/icon-cloud-upload.svg');

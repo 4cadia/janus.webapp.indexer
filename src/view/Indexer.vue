@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
+  <div class="container container--indexer">
     <h1>{{title}}</h1>
     <div class="wrapper">
-      <v-form-upload class="content"/>
+      <v-form-upload/>
     </div>
   </div>
 </template>
@@ -24,4 +24,12 @@ export default {
 </script>
 
 <style scoped>
+.container--indexer {
+  background: none;
+  color: white;
+  margin-top: 4vw;
+}
+.container--indexer h1 {
+  color: white;
+}
 </style>

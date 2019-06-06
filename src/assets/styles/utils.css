@@ -10,7 +10,7 @@
   margin: auto;
 }
 
-.hero {
+.full {
   width: 100vw;
   margin-left: -5vw;
 }
@@ -61,6 +61,12 @@
 
 .btn--success {
   background: var(--color-green);
+}
+
+.btn--outline {
+  /* color: var(--color-primary); */
+  background: none;
+  border: 1px solid;
 }
 
 .errors {
