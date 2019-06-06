@@ -42,7 +42,7 @@ export default {
       uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
-      filename: FileList
+      filename: ''
     }
   },
   computed: {
@@ -73,14 +73,15 @@ export default {
   methods: {
     reset () {
       // reset form to initial state
-      this.currentStatus = STATUS_INITIAL
       this.uploadedFiles = []
       this.uploadError = null
+      this.filename = ''
+      this.currentStatus = STATUS_INITIAL
     },
     handleUpload: function (files) {
       this.filename = files[0].name
+      this.currentStatus = STATUS_SAVING
       this.fieldIsValid(this.isEmpty(this.filename), 'EmptyField')
-      this.save()
     },
     fieldIsValid: function (exception, type) {
       let exceptionType = this.filterExceptionByType(type)
@@ -95,9 +96,6 @@ export default {
     },
     isEmpty: function (value) {
       return value === '' || value == null
-    },
-    save (formData) {
-      this.currentStatus = STATUS_SAVING
     }
   },
   props: {

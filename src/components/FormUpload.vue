@@ -92,6 +92,7 @@ export default {
       this.uploadError = null
       this.hash = ''
       this.ipfsLinkHash = []
+      this.$refs.inputFile.reset()
     },
     save () {
       if (this.provider.accounts === undefined) {
