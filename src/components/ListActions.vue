@@ -36,14 +36,14 @@ export default {
   display: inline-block;
 }
 .list-actions .menu-item .btn-primary {
-  font-size: 1.4vw;
+  /* font-size: 1.4vw; */
   height: 50px;
 }
 .list-actions .menu-item .btn-primary:hover {
   box-shadow: rgb(0, 0, 0) 3px 3px 4px;
 }
 .list-actions .menu-item a {
-  font-size: 1.4vw;
+  /* font-size: 1.4vw; */
   font-weight: bold;
   text-decoration: none;
   color: var(--color-cyan);

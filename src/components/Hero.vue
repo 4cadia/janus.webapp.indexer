@@ -44,6 +44,7 @@ export default {
   position: relative;
   min-height: 20vh;
   height: 42vw;
+  max-height: 800px;
   overflow: hidden;
 }
 .hero .hero_background {
@@ -78,20 +79,21 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 90%;
+  margin: auto;
 }
 .hero .content--text {
-  margin-left: 60px;
   color: white;
   text-align: left;
   width: 50%;
 }
 .hero .content--text .title {
-  font-size: 3vw;
+  /* font-size: 3vw; */
   color: white;
   margin-top: 0;
 }
 .hero .content--text .text {
-  font-size: 1.5vw;
+  /* font-size: 1.5vw; */
 }
 .hero .content--image,
 .hero .content--text {
@@ -99,6 +101,7 @@ export default {
 }
 .hero .content--image {
   width: 40vw;
+  max-width: 800px;
 }
 .hero .content--image img {
   width: 100%;

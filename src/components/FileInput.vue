@@ -202,9 +202,9 @@ export default {
   filter: invert(100%);
 }
 .file_icon--initial {
-  background-image: url('../assets/icon-cloud-upload.svg');
+  background-image: url('../assets/images/icon-cloud-upload.svg');
 }
 .file_icon--success {
-  background-image: url('../assets/icon-cloud-done.svg');
+  background-image: url('../assets/images/icon-cloud-done.svg');
 }
 </style>
