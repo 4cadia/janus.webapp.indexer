@@ -19,7 +19,7 @@ export default {
     'v-header': Header
   },
   created(){ 
-    this.$store.dispatch('web3/registerWeb3')
+    // this.$store.dispatch('web3/registerWeb3')
   }
 }
 </script>

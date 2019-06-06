@@ -36,7 +36,7 @@ export default {
             hollow: {
               margin: 0,
               size: '70%',
-              background: '#293450'
+              background: '#5436D6'
             },
             track: {
               dropShadow: {

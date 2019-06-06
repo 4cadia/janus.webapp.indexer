@@ -8,7 +8,6 @@
         type="file"
         :class="this.isValid"
         :name="inputName"
-        :value="filename"
         @input="$emit('input', $event.target.files)"
         v-on:change="handleUpload($event.target.files)"
         :accept="this.accept"
@@ -43,7 +42,7 @@ export default {
       uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
-      filename: ''
+      filename: FileList
     }
   },
   computed: {
@@ -104,10 +103,6 @@ export default {
   props: {
     inputName: {
       type: String,
-      required: true
-    },
-    value: {
-      type: Array,
       required: true
     },
     accept: {

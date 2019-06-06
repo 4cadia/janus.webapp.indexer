@@ -15,7 +15,7 @@
         </button>
         <div class="form_field" v-if="this.showHashInput">
           <v-input
-            placeholderTxt="e.g. 0xAc03BB73b6a9e108530AFf4Df5077c2B3D481e5A"
+            placeholderTxt="e.g. QmTzX8TJe14i3ic6yAzuavNzx3WAz9UXSuFMX5qqbiMQSV"
             inputType="text"
             inputName="hash"
             inputLabel="Content Hash"
@@ -25,7 +25,8 @@
         </div> -->
         <div class="form_control">
           <button type="submit" class="btn btn--alert" @click="reset()">Cancel</button>
-          <button type="submit" class="btn btn--success" @click="save()">Index Content</button>
+          <button type="submit" class="btn btn--success" @click="save()"
+            :title="(this.provider.accounts === undefined) ? 'You need to connect with Metamask' : 'Index here'">Index Content</button>
         </div>
       </div>
     </form>
@@ -54,7 +55,7 @@ export default {
     return {
       attemptSubmit: false,
       hash: '',
-      files: [],
+      files: FileList,
       ipfsLinkHash: [],
       showHashInput: false
     }
@@ -82,7 +83,7 @@ export default {
       this.attemptSubmit = true
     },
     handleShowHashInput (e) {
-      this.showHashInput = true
+      this.showHashInput = !this.showHashInput
     },
     reset () {
       // reset form to initial state
@@ -93,6 +94,11 @@ export default {
       this.ipfsLinkHash = []
     },
     save () {
+      if (this.provider.accounts === undefined) {
+        this.$notification.error('You need to connect with Metamask')
+        return
+      }
+
       if (this.files.length === 0 && this.hash === '') {
         this.currentStatus = STATUS_FAILED
         this.$notification.error('Zip file or Content Hash must be filled!')
@@ -125,7 +131,7 @@ export default {
                 this.$notification.warning(error)
               }
             } else {
-              this.$notification.success(`The file ${file.HtmlData.Titulo} was successfully added`)
+              this.$notification.success(`Success! Thank you for contributing with your content!`)
             }
           }
         } else {

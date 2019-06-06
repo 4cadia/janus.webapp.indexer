@@ -79,6 +79,7 @@ export default {
         ethereum.enable()
         if (typeof web3 !== 'undefined') {
           // Use Mist/MetaMask's provider
+          this.$store.dispatch('web3/registerWeb3')
           provider = new ethers.providers.Web3Provider(web3.currentProvider)
           let originalCookie = []
           signer = provider.getSigner()
@@ -117,13 +118,13 @@ export default {
     handleCivic: function () {
       /* global Civic */
       /* eslint no-undef: "error" */
-      this.isLoading = true
       console.log(process.env.CIVICID)
       let civicSip = new Civic({appId: `${process.env.CIVICID}`})
       civicSip.signup({style: 'popup', scopeRequest: civicSip.ScopeRequests.BASIC_SIGNUP})
       civicSip.on('auth-code-received', event => {
         if (event.response) {
           // console.log(event.response)
+          this.isLoading = true
           let originalCookie = event.response
           axios.post(process.env.IDENTITY_BASE_URL, {'token': event.response})
             .then((response) => {
@@ -268,6 +269,8 @@ export default {
 }
 
 .button-disabled {
-  background: silver !important;
+  /* background: silver !important; */
+  cursor: not-allowed;
+  opacity: .2;
 }
 </style>
