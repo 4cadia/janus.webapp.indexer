@@ -2,7 +2,7 @@
   <div class="header">
     <router-link to="/" class="header_logo">
       <img class="logo" src="../assets/images/logo_clear.png">
-      <h1 class="title">Janus</h1>
+      <h2 class="title">Janus</h2>
     </router-link>
     <div class="header_menu">
       <ul class="menu">
@@ -42,6 +42,10 @@ export default {
   display: flex;
   justify-content: space-between;
   background: white;
+}
+.header_logo {
+  text-decoration: none;
+  /* font-size: 2vw; */
 }
 .header_logo .logo {
   width: 25px;

@@ -82,12 +82,12 @@ export default {
   width: 80%;
 }
 .item_title {
-  font-size: 1.8vw;
+  /* font-size: 1.8vw; */
   margin-bottom: 10px;
   color: var(--color-navy);
 }
 .item_text h5 {
-  font-size: 1.4vw;
+  /* font-size: 1.4vw; */
   font-weight: 100;
 }
 </style>

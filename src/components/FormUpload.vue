@@ -10,7 +10,7 @@
             accept=".zip"
           />
         </div>
-        <button class="btn btn--outline" @click="handleShowHashInput()">
+        <!-- <button class="btn btn--outline" @click="handleShowHashInput()">
           Do you have a indexed content hash?
         </button>
         <div class="form_field" v-if="this.showHashInput">
@@ -22,7 +22,7 @@
             v-model="hash"
             ref="inputHash"
           />
-        </div>
+        </div> -->
         <div class="form_control">
           <button type="submit" class="btn btn--alert" @click="reset()">Cancel</button>
           <button type="submit" class="btn btn--success" @click="save()">Index Content</button>
@@ -199,7 +199,7 @@ export default {
 }
 .close {
   float: right;
-  font-size: 16;
+  font-size: 16px;
   font-weight: 100%;
   line-height: 1;
   text-shadow: black;

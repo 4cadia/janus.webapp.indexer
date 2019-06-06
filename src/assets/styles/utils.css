@@ -64,7 +64,6 @@
 }
 
 .btn--outline {
-  /* color: var(--color-primary); */
   background: none;
   border: 1px solid;
 }
@@ -85,7 +84,12 @@
 
 .subtitle {
   color: var(--color-gray);
-  font-size: 2.3vw;
+  /* font-size: 2.3vw; */
   max-width: 60%;
   margin: 0 auto 3vw;
+}
+
+.router-link-exact-active {
+  color: var(--color-primary) !important;
+  font-weight: bold;
 }

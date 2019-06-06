@@ -34,6 +34,6 @@ export default {
   text-align: left;
 }
 .content {
-  font-size: 1.5vw;
+  /* font-size: 1.5vw; */
 }
 </style>
