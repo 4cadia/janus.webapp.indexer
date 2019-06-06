@@ -268,6 +268,8 @@ export default {
 }
 
 .button-disabled {
-  background: silver !important;
+  /* background: silver !important; */
+  cursor: not-allowed;
+  opacity: .2;
 }
 </style>
