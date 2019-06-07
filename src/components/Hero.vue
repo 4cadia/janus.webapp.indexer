@@ -10,8 +10,7 @@
         <img :src="hero.image" alt="">
       </div>
     </div>
-    <div class="hero_background">
-    </div>
+    <div class="hero_background"></div>
   </div>
 </template>
 
@@ -57,7 +56,7 @@ export default {
 .hero .hero_background {
   background: #202020;
   overflow: hidden;
-  transform: skew(0deg, -3deg) translateY(-7%);
+  transform: skew(0deg, -3deg) translateY(-80px);
 }
 .hero .hero_background:after {
   opacity: .4;
@@ -83,7 +82,7 @@ export default {
   margin: auto;
   padding: 8% 0;
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 .hero .content--text {
   color: white;
@@ -109,13 +108,22 @@ export default {
   .hero {
     max-height: 100%;
     height: auto;
+    margin-bottom: 40px;
   }
   .hero .hero_background {
-    -webkit-transform: skew(0deg, -3deg) translateY(-6%);
-    transform: skew(0deg, -3deg) translateY(-6%);
+    -webkit-transform: skew(0deg, -3deg) translateY(-20px);
+    transform: skew(0deg, -3deg) translateY(-20px);
   }
   .hero_content {
-    padding: 80px 0 40px 0;
+    padding: 40px 0 80px;
+    display: block;
+  }
+  .hero .content--text {
+    width: 90%;
+  }
+  .hero .content--image {
+    margin: auto;
+    width: 80%;
   }
 }
 </style>

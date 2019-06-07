@@ -94,6 +94,9 @@ export default {
 
 /* Media Mobile */
 @media (max-width: 768px) {
+  .menu-hamburguer {
+    display: block;
+  }
   .menu {
     position: fixed;
     width: 70vw;

@@ -3,7 +3,8 @@ const state = {
   userId: [],
   data: [],
   response: [],
-  authenticated: false
+  authenticated: false,
+  metamaskStatus: false
 }
 
 // getters

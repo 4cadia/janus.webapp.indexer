@@ -43,6 +43,10 @@ export default {
 }
 </script>
 <style scoped>
+.list-icon .subtitle {
+  margin-bottom: 40px;
+  font-size: 1.8em;
+}
 .list {
   margin: auto;
   max-width: 80%;
@@ -82,12 +86,25 @@ export default {
   width: 80%;
 }
 .item_title {
-  /* font-size: 1.8vw; */
   margin-bottom: 10px;
   color: var(--color-navy);
 }
 .item_text h5 {
-  /* font-size: 1.4vw; */
   font-weight: 100;
+}
+/* Media Mobile */
+@media (max-width: 768px) {
+  .item {
+    padding: 10%;
+    display: block;
+  }
+  .item .content {
+    width: fit-content;
+  }
+  .item_icon {
+    width: 60px;
+    height: auto;
+    margin-bottom: 20px;
+  }
 }
 </style>

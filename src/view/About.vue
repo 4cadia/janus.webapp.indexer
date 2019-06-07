@@ -27,7 +27,6 @@ export default {
     'v-paragraph': Paragraph
   },
   mounted: function () {
-    console.log(aboutContent)
   }
 }
 </script>
