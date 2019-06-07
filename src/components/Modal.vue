@@ -67,16 +67,16 @@ export default {
     openModal: function () {
       this.showModal = true
     },
-    handleMetaMask: function () {
-      var signer
-      var provider
-      var web3
+    handleMetaMask: async function () {
+      let signer
+      let provider
+      let web3
       try {
         // eslint-disable-next-line
         web3 = new Web3(ethereum)
         // Solicita acesso a carteira Ethereum se necessário
         // eslint-disable-next-line
-        ethereum.enable()
+        let accounts = await ethereum.enable()
         if (typeof web3 !== 'undefined') {
           // Use Mist/MetaMask's provider
           this.$store.dispatch('web3/registerWeb3')

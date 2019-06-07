@@ -124,20 +124,27 @@ export default {
       let indexer = new Indexer(this.provider.web3().currentProvider)
       indexer.AddContent(indexRequest, indexResult => {
         if (indexResult.Success) {
+          let warnings = []
           for (let index = 0; index < indexResult.IndexedFiles.length; index++) {
             const file = indexResult.IndexedFiles[index]
             this.ipfsLinkHash.push(file.IpfsHash)
             if (file.Errors.length > 0) {
-              const errors = file.Errors.reduce(function (acc, curr) {
-                typeof acc[curr] === 'undefined' ? acc[curr] = 1 : acc[curr] += 1
-                return acc
-              }, {})
-              for (var error in errors) {
-                this.$notification.warning(`${errors[error]} warning(s) were encountered while indexing your file. Fields: ${error}`)
+              for (let index = 0; index < file.Errors.length; index++) {
+                const error = file.Errors[index]
+                warnings.push(error)
               }
             } else {
               this.$notification.success(`Success! Thank you for contributing with your content!`)
               this.$notification.success(`Access your content in: http://ipfs.caralabs.me/ipfs/${this.ipfsLinkHash[0]}`, {infiniteTimer: true})
+            }
+          }
+          if (warnings.length > 0) {
+            const wrngs = warnings.reduce(function (acc, curr) {
+              typeof acc[curr] === 'undefined' ? acc[curr] = 1 : acc[curr] += 1
+              return acc
+            }, {})
+            for (var warning in wrngs) {
+              this.$notification.warning(`${wrngs[warning]} warning(s) were encountered while indexing your file. Fields: ${warning}`)
             }
           }
         } else {
