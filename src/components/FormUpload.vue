@@ -128,9 +128,12 @@ export default {
             const file = indexResult.IndexedFiles[index]
             this.ipfsLinkHash.push(file.IpfsHash)
             if (file.Errors.length > 0) {
-              for (let index = 0; index < file.Errors.length; index++) {
-                const error = file.Errors[index]
-                this.$notification.warning(error)
+              const errors = file.Errors.reduce(function (acc, curr) {
+                typeof acc[curr] === 'undefined' ? acc[curr] = 1 : acc[curr] += 1
+                return acc
+              }, {})
+              for (var error in errors) {
+                this.$notification.warning(`${errors[error]} warning(s) were encountered while indexing your file. Fields: ${error}`)
               }
             } else {
               this.$notification.success(`Success! Thank you for contributing with your content!`)
