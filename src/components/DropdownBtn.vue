@@ -30,19 +30,15 @@
         </div>
       </div>
     </div>
-    <v-modal ref="modal"></v-modal>
   </section>
 </template>
 
 <script>
-import Modal from '@/components/Modal'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Dropdown',
-  components: {
-    'v-modal': Modal
-  },
+  components: {},
   computed: {
     ...mapState({
     //  status: state => state.authentication.status
@@ -54,7 +50,7 @@ export default {
       this.$router.push({ name: 'Profile' })
     },
     handleOpenModalAuth: function () {
-      this.$refs.modal.openModal()
+      this.$root.$emit('openModal')
     },
     handleSignOut: function () {
       document.cookie = 'janusToken='
@@ -70,10 +66,6 @@ export default {
     }
   },
   mounted: function () {
-    let modal = this.$refs.modal
-    this.$root.$on('getStarted', () => {
-      modal.openModal()
-    })
   }
 }
 </script>
@@ -118,6 +110,7 @@ export default {
   cursor: pointer;
   font-family:'Montserrat', Helvetica, Arial, sans-serif;
   background-color: #ffffff;
+  font-size: 1em;
 }
 
 .dropdown-content button:hover {
@@ -128,4 +121,19 @@ export default {
   display: block;
 }
 
+/* Media Mobile */
+@media (max-width: 768px) {
+  .btn {
+    display: none;
+  }
+  .account {
+    display: block;
+  }
+  .dropdown-content {
+    display: block;
+    position: relative;
+    width: 100%;
+    box-shadow: none;
+  }
+}
 </style>

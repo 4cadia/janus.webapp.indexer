@@ -13,7 +13,7 @@
         :accept="this.accept"
       >
       <p class="separator">or</p>
-      <button type="button" class="btn btn--icon">Browse Files</button>
+      <button type="button" class="btn">Browse Files</button>
     </div>
     <div class="errors">
       <li v-for="(exception, index) in this.exceptions" :key="index">

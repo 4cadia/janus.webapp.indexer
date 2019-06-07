@@ -2,7 +2,7 @@
   <div class="container container--home">
     <div class="wrapper">
       <div class="col full">
-        <v-hero :hero="this.content.list_hero[0]" float="right">
+        <v-hero :hero="this.content.list_hero[0]" float="right" classes="full-content">
           <v-list-actions/>
         </v-hero>
       </div>
