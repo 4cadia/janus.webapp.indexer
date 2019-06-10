@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <form @submit.prevent="handleSubmit" class="form">
+    <form @submit.prevent="handleSubmit" class="form" ref="formContainer">
       <div class="form_content">
         <div class="form_field">
           <v-file-input
@@ -23,7 +23,7 @@
             ref="inputHash"
           />
         </div> -->
-        <div v-if="this.ipfsLinkHash.length > 0"> Access your content in: <a :href="`http://ipfs.caralabs.me/ipfs/${this.ipfsLinkHash[0]}`"> {{this.ipfsLinkHash[0]}}</a></div>
+        <div v-if="this.ipfsLinkHash.length > 0"> Access your content in: <a target="_blank" :href="`http://ipfs.caralabs.me/ipfs/${this.ipfsLinkHash[0]}`"> {{this.ipfsLinkHash[0]}}</a></div>
         <div class="form_control">
           <button type="submit" class="btn btn--alert" @click="reset()">Cancel</button>
           <button type="submit" class="btn btn--success" @click="save()"
@@ -55,10 +55,11 @@ export default {
   data () {
     return {
       attemptSubmit: false,
-      hash: '',
+      // hash: '',
       files: FileList,
       ipfsLinkHash: [],
-      showHashInput: false
+      showHashInput: false,
+      loader: {}
     }
   },
   computed: {
@@ -91,19 +92,27 @@ export default {
       this.currentStatus = STATUS_INITIAL
       this.files = []
       this.uploadError = null
-      this.hash = ''
+      // this.hash = ''
       this.ipfsLinkHash = []
       this.$refs.inputFile.reset()
     },
     save () {
+      this.ipfsLinkHash = []
+      // this.hash = ''
+      this.loader = this.$loading.show({
+        container: this.fullPage ? null : this.$refs.formContainer
+      })
+
       if (this.provider.accounts === undefined) {
         this.$notification.error('You need to connect with Metamask')
+        this.loader.hide()
         return
       }
 
       if (this.files.length === 0 && this.hash === '') {
         this.currentStatus = STATUS_FAILED
         this.$notification.error('Zip file or Content Hash must be filled!')
+        this.loader.hide()
         return
       }
       // upload data to the server
@@ -123,6 +132,7 @@ export default {
 
       let indexer = new Indexer(this.provider.web3().currentProvider)
       indexer.AddContent(indexRequest, indexResult => {
+        this.loader.hide()
         if (indexResult.Success) {
           let warnings = []
           for (let index = 0; index < indexResult.IndexedFiles.length; index++) {
