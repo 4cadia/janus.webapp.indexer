@@ -1,44 +1,42 @@
 <template>
-    <div>
-        <transition name="modal" v-if="showModal">
-            <div class="modal-mask">
-                <div class="modal-wrapper">
-                    <div class="modal-container">
-                        <div class="modal-header">
-                            <slot name="header">
-                                <h3> Sign In </h3>
-                                <button class="modal-close-button" @click="closeModal">X</button>
-                            </slot>
-                        </div>
-                        <div class="modal-body">
-                            <slot name="body">
-                                <p>
-                                    To sign in Janus it is necessary create a decentralized identity.
-                                </p>
-                            </slot>
-                        </div>
-                        <loader v-if="this.isLoading"></loader>
-                        <div class="modal-footer">
-                            <slot name="footer">
-                                <button class="modal-button civic logo-civic" @click="handleCivic" v-bind:class="{'button-disabled': disableCivic}">
-                                  Civic
-                                </button>
-                                <button class="modal-button metamask logo-metamask" @click="handleMetaMask" v-bind:class="{'button-disabled': disableMetaMask}">
-                                  MetaMask
-                                </button>
-                                <button class="modal-button uPort logo-uPort" @click="handleuPort" v-bind:class="{'button-disabled': disableuPort}">
-                                  uPort
-                                </button>
-                                <div class="modal-error-message" v-if="showError">
-                                    <p>Could not log in, try again later.</p>
-                                </div>
-                            </slot>
-                        </div>
-                    </div>
-                </div>
+  <div>
+    <transition name="modal" v-if="showModal">
+        <div class="modal-mask">
+          <div class="modal-wrapper">
+            <div class="modal-container">
+              <div class="modal-header">
+                <slot name="header">
+                  <h3> Sign In </h3>
+                  <button class="btn--icon btn--close" @click="closeModal"></button>
+                </slot>
+              </div>
+              <div class="modal-body">
+                <slot name="body">
+                  <p>To sign in Janus it is necessary create a decentralized identity.</p>
+                </slot>
+              </div>
+              <loader v-if="this.isLoading"></loader>
+              <div class="modal-footer">
+                <slot name="footer">
+                  <button class="modal-button civic logo-civic" @click="handleCivic" v-bind:class="{'button-disabled': disableCivic}">
+                    Civic
+                  </button>
+                  <button class="modal-button metamask logo-metamask" @click="handleMetaMask" v-bind:class="{'button-disabled': disableMetaMask}">
+                    MetaMask
+                  </button>
+                  <button class="modal-button uPort logo-uPort" @click="handleuPort" v-bind:class="{'button-disabled': disableuPort}">
+                    uPort
+                  </button>
+                  <div class="modal-error-message" v-if="showError">
+                    <p>Could not log in, try again later.</p>
+                  </div>
+                </slot>
             </div>
-        </transition>
-    </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -150,6 +148,11 @@ export default {
       disableMetaMask: process.env.DISABLE_IDENTITY_METAMASK,
       disableuPort: process.env.DISABLE_IDENTITY_UPORT
     }
+  },
+  mounted: function () {
+    this.$root.$on('openModal', () => {
+      this.openModal()
+    })
   }
 }
 </script>
@@ -157,7 +160,7 @@ export default {
 <style scoped>
 .modal-mask {
   position: fixed;
-  z-index: 9998;
+  z-index: 10;
   top: 0;
   left: 0;
   width: 100%;
@@ -174,6 +177,7 @@ export default {
 
 .modal-container {
   width: 20vw;
+  min-width: 300px;
   margin: 0 auto;
   padding: 2% 2% 4% 2% ;
   background-color: #fff;
@@ -271,5 +275,16 @@ export default {
   /* background: silver !important; */
   cursor: not-allowed;
   opacity: .2;
+}
+
+/* Media Mobile */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 70px;
+    box-sizing: border-box;
+  }
 }
 </style>

@@ -1,16 +1,9 @@
 <template>
   <div class="container container--about">
-    <div class="wrapper">
-      <div class="col full">
-        <v-hero :hero="this.content.list_hero[0]" float="right" classes="highlight"/>
-      </div>
-      <div class="col">
-        <v-paragraph :paragraph="this.content.list_paragraph[0]">
-        </v-paragraph>
-      </div>
-      <div class="col">
-        <v-list-icon :list="this.content.list_icon[0]"/>
-      </div>
+    <div class="col" v-for="(block, index) in this.content" :key="index">
+      <v-hero v-if="block['type']=='list_hero'" :hero="block['content'][0]" float="right" classes="gray"/>
+      <v-list-icon v-if="block['type']=='list_icon'" :list="block['content'][0]"/>
+      <v-paragraph v-if="block['type']=='list_paragraph'" :paragraph="block['content'][0]"/>
     </div>
   </div>
 </template>
@@ -32,6 +25,8 @@ export default {
     'v-hero': Hero,
     'v-list-icon': ListIcon,
     'v-paragraph': Paragraph
+  },
+  mounted: function () {
   }
 }
 </script>
