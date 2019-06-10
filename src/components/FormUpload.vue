@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <form @submit.prevent="handleSubmit" class="form">
+    <form @submit.prevent="handleSubmit" class="form" ref="formContainer">
       <div class="form_content">
         <div class="form_field">
           <v-file-input
@@ -23,7 +23,7 @@
             ref="inputHash"
           />
         </div> -->
-        <div v-if="this.ipfsLinkHash.length > 0"> Access your content in: <a :href="`http://ipfs.caralabs.me/ipfs/${this.ipfsLinkHash[0]}`"> {{this.ipfsLinkHash[0]}}</a></div>
+        <div v-if="this.ipfsLinkHash.length > 0"> Access your content in: <a target="_blank" :href="`http://ipfs.caralabs.me/ipfs/${this.ipfsLinkHash[0]}`"> {{this.ipfsLinkHash[0]}}</a></div>
         <div class="form_control">
           <button type="submit" class="btn btn--alert" @click="reset()">Cancel</button>
           <button type="submit" class="btn btn--success" @click="save()"
@@ -55,10 +55,11 @@ export default {
   data () {
     return {
       attemptSubmit: false,
-      hash: '',
+      // hash: '',
       files: FileList,
       ipfsLinkHash: [],
-      showHashInput: false
+      showHashInput: false,
+      loader: {}
     }
   },
   computed: {
@@ -91,19 +92,27 @@ export default {
       this.currentStatus = STATUS_INITIAL
       this.files = []
       this.uploadError = null
-      this.hash = ''
+      // this.hash = ''
       this.ipfsLinkHash = []
       this.$refs.inputFile.reset()
     },
     save () {
+      this.ipfsLinkHash = []
+      // this.hash = ''
+      this.loader = this.$loading.show({
+        container: this.fullPage ? null : this.$refs.formContainer
+      })
+
       if (this.provider.accounts === undefined) {
         this.$notification.error('You need to connect with Metamask')
+        this.loader.hide()
         return
       }
 
       if (this.files.length === 0 && this.hash === '') {
         this.currentStatus = STATUS_FAILED
         this.$notification.error('Zip file or Content Hash must be filled!')
+        this.loader.hide()
         return
       }
       // upload data to the server
@@ -123,18 +132,29 @@ export default {
 
       let indexer = new Indexer(this.provider.web3().currentProvider)
       indexer.AddContent(indexRequest, indexResult => {
+        this.loader.hide()
         if (indexResult.Success) {
+          let warnings = []
           for (let index = 0; index < indexResult.IndexedFiles.length; index++) {
             const file = indexResult.IndexedFiles[index]
             this.ipfsLinkHash.push(file.IpfsHash)
             if (file.Errors.length > 0) {
               for (let index = 0; index < file.Errors.length; index++) {
                 const error = file.Errors[index]
-                this.$notification.warning(error)
+                warnings.push(error)
               }
             } else {
               this.$notification.success(`Success! Thank you for contributing with your content!`)
               this.$notification.success(`Access your content in: http://ipfs.caralabs.me/ipfs/${this.ipfsLinkHash[0]}`, {infiniteTimer: true})
+            }
+          }
+          if (warnings.length > 0) {
+            const wrngs = warnings.reduce(function (acc, curr) {
+              typeof acc[curr] === 'undefined' ? acc[curr] = 1 : acc[curr] += 1
+              return acc
+            }, {})
+            for (var warning in wrngs) {
+              this.$notification.warning(`${wrngs[warning]} warning(s) were encountered while indexing your file. Fields: ${warning}`)
             }
           }
         } else {
