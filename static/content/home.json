@@ -4,38 +4,8 @@
     "content": [
       {
         "title": "Janus Indexer",
-        "text": "<p>We present Janus Platform, a Ethereum Blockchain system that will lead you to the future of descentralized web. Here you will be able to store and find content on the Web 3.0.</p><p><em>The future is here</em></p>",
+        "text": "<p>We present Janus Indexer, a Ethereum Blockchain tool that will upload your content on the decentralized Web 3.0</p><p><em>The future is here</em></p>",
         "image": ""
-      }
-    ]
-  },
-  {
-    "type": "list_icon",
-    "content": [
-      {
-        "title": "Advantages of using blockchain",
-        "data": [
-          {
-            "title": "Distributed",
-            "icon": "./static/images/decentralized.png",
-            "text": "The Blockchain has no central authority, data is stored on a distributed network of nodes, each network node is able to replicate and store a copy of the data. Because of this, a single node does not affect the availability or security of the network."
-          },
-          {
-            "title": "Immutable",
-            "icon": "./static/images/interoperability.png",
-            "text": "Confirmed blocks are very unlikely to be reversed, meaning that once data has been registered into the blockchain it is extremely difficult to remove or change it. Every interaction is tracked and permanently recorded on a distributed and public ledger."
-          },
-          {
-            "title": "Secure",
-            "icon": "./static/images/safety.png",
-            "text": "After a block has been added to the end of the blockchain it is very difficult to go back and alter the contents of the block. That’s because each block contains its own hash, along with the hash of the block before it. Hash codes are created by a math function that turns digital information into a string of numbers and letters. If that information is edited in any way, the hash code changes as well."
-          },
-          {
-            "title": "Trusty",
-            "icon": "./static/images/data.png",
-            "text": "The trusty of the Blockchain is based on the believe of two or more participants, computers must 'prove' that they have done 'work' by solving a complex computational math problem. If a computer solves one of these problems, they become eligible to add a block to the blockchain."
-          }
-        ]
       }
     ]
   },
