@@ -23,12 +23,13 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 .paragraph {
   position: relative;
   width: 80%;
   margin: auto;
   align-items: center;
+  text-align: left;
 }
 .text{
   text-align: left;
